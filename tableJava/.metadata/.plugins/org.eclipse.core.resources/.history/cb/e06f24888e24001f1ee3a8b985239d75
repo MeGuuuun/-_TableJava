@@ -10,12 +10,12 @@
 </head>
 <body>
 <form action="login" method="post">
-	<h1>로그인</h1>
-	<input type="text" name="user_id"><br>
-	비밀번호 <br>
-	<input type="text" name="user_pwd"> <br>
-	<button id="joinBtn">회원가입</button> &ensp; &ensp; &ensp;
-	<button type="submit" value="로그인">로그인<br></button>
+<h1>로그인</h1>
+<input type="text" name="user_id"><br>
+비밀번호 <br>
+<input type="text" name="user_pwd"> <br>
+<button id="joinBtn">회원가입</button> &ensp; &ensp; &ensp;
+<button type="submit" value="로그인">로그인<br></button>
 </form>
 <button id="findIDBtn">아이디 찾기</button>
 <button id="findPWBtn">비밀번호 찾기</button>
