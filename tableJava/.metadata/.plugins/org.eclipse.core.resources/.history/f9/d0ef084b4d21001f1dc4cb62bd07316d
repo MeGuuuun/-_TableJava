@@ -1,0 +1,16 @@
+package dc.human.kimbanbagi.tableJava.dto;
+
+public class bookDTO {
+	String user_id;
+	String retaurant_id;
+	String restaurant_name;
+	String date;
+	String time;
+	String status;
+	String a_count;
+	String k_count;
+	String s_count;
+	String w_count;
+	String requirement;
+
+}

@@ -1,0 +1,36 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/restaurantDetail")
+public class restaurantDetail extends HttpServlet {
+	public void init() throws ServletException {
+		System.out.println("Servlet Created");
+	}
+
+	public void destroy() {
+		System.out.println("Servlet Destroyed");
+	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doHandle(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doHandle(request, response);
+	}
+	
+	private void doHandle(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+	}
+
+}

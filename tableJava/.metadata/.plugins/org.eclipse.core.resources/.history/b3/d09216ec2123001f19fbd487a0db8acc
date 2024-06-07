@@ -1,0 +1,40 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기 페이지</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function findPW() {
+	var userId = document.getElementById("userID").value;
+	var userName = document.getElementById("userName").value;
+	
+    $.ajax({
+        type: "POST",
+        url: "findPW",
+        data: { action: "findPW", userID: userId, userName : userName },
+        success: function(response) {
+            
+        },
+        error: function() {
+            alert("일치하는 정보가 없습니다.");
+        }
+    });
+  
+}
+</script>
+</head>
+<body>
+<h1>비밀번호 찾기</h1>
+<form action="findPW" method="post">
+	ID : <br>
+	<input type="text" name="userID" >
+	<br> NAME : <br>
+	<input type="text" name="userName">
+	<br><br>
+	<button type="button" onclick="findPW()">비밀 번호 찾기</button>
+</form>
+</body>
+</html>

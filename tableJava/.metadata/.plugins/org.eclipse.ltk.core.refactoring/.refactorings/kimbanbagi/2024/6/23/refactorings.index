@@ -1,0 +1,61 @@
+1717377246716	Delete element
+1717377256926	Delete element
+1717394679171	Rename resource 'text.jsp'
+1717396042936	Delete element
+1717400389450	Move 'restaurantDetail.jsp' to 'WebContent'
+1717401277872	Rename resource 'success.jsp'
+1717402201686	Rename resource 'ok.jsp'
+1717405643222	Rename type 'restaurantDetail'
+1717407194516	Delete element
+1717462286765	Delete element
+1717466511823	Delete element
+1717466575750	Move 'userBookList.jsp' to 'WebContent'
+1717469884101	Delete elements
+1717487328881	Delete element
+1717487860890	Delete element
+1717487864434	Delete element
+1717487868066	Delete element
+1717487872211	Delete element
+1717557870273	Delete element
+1717563703615	Rename type 'bookServlet'
+1717563786491	Rename type 'findIDServlet'
+1717563797196	Rename type 'findPWServlet'
+1717563802228	Rename type 'joinServlet'
+1717563806182	Rename type 'loginServlet'
+1717563814489	Rename type 'ownerMainServlet'
+1717563818900	Rename type 'registerServlet'
+1717563823643	Rename type 'restaurantDetailServlet'
+1717563827712	Rename type 'userBookListServlet'
+1717563831635	Rename type 'waitServlet'
+1717563839310	Rename type 'waitDTO'
+1717563845704	Rename type 'tempoPWDTO'
+1717563849961	Rename type 'roleDTO'
+1717563854685	Rename type 'restaurantDTO'
+1717563858258	Rename type 'loginDTO'
+1717563862563	Rename type 'joinDTO'
+1717563871921	Rename type 'idDTO'
+1717563876715	Rename type 'findIDDTO'
+1717563882165	Rename type 'bookDTO'
+1717564033723	Delete element
+1717566574874	Delete element
+1717566578345	Delete element
+1717569508499	Delete element
+1717570498411	Delete element
+1717572773178	Delete element
+1717572813616	Rename type 'OwnerBookList'
+1717573311377	Delete element
+1717574959365	Delete element
+1717579247204	Delete element
+1717579712063	Delete element
+1717720091316	Delete element
+1717725408892	Delete element
+1717725482805	Rename resource 'owner_main_ok.jsp'
+1717730120916	Delete element
+1717732420445	Rename type 'bookDAO'
+1717732424635	Rename type 'findIDDAO'
+1717732429984	Rename type 'joinDAO'
+1717732440445	Rename type 'loginDAO'
+1717732445077	Rename type 'restaurantDAO'
+1717732449413	Rename type 'tempoPWDAO'
+1717732453503	Rename type 'waitDAO'
+1717734994847	Delete element

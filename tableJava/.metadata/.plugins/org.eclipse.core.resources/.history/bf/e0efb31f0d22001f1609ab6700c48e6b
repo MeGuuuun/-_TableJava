@@ -1,0 +1,48 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import dc.human.kimbanbagi.tableJava.dao.registerDAO;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.MultipartConfig;
+
+@WebServlet("/register")
+@MultipartConfig
+public class registerServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String restaurantId = request.getParameter("restaurantId");
+        String restaurantName = request.getParameter("restaurantName");
+        String restaurantHead = request.getParameter("restaurantHead");
+        String restaurantCity = request.getParameter("restaurantCity");
+        String restaurantAddress = request.getParameter("restaurantAddress");
+        String restaurantNumber = request.getParameter("restaurantNumber");
+        String userId = request.getParameter("userId");
+        String reservationAvailable = request.getParameter("reservationAvailable");
+        String waitingAvailable = request.getParameter("waitingAvailable");
+        Part imagePart = request.getPart("restaurantPhoto");
+
+        InputStream inputStream = imagePart.getInputStream();
+
+        restaurantDTO restaurant = new restaurantDTO();
+        
+        restaurant.setRestaurantId(restaurantId);
+        restaurant.setrestaurantName(restaurantName);
+        restaurant.setrestaurantHead(restaurantHead);
+        restaurant.setrestaurantCity(restaurantCity);
+        restaurant.setrestaurantAddress(restaurantAddress);
+        restaurant.setRestaurantNumber(restaurantNumber);
+        restaurant.setUserId(userId);
+        restaurant.setReservationAvailable(reservationAvailable);
+        restaurant.setWaitingAvailable(waitingAvailable);
+        restaurant.setRestaurantPhoto(inputStream);
+
+        registerDAO dao = new registerDAO();
+        dao.addRestaurant(restaurant);
+
+        response.sendRedirect("register_ok.jsp");
+    }
+}

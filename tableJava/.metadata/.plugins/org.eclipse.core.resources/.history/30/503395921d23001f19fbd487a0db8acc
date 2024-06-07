@@ -1,0 +1,47 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.FindIDDTO;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/findID")
+public class FindIDServlet extends HttpServlet {
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		
+		String email = request.getParameter("email");
+		String name = request.getParameter("name");
+		
+		FindIDDTO fidto = new FindIDDTO();
+		fidto.setEmail(email);
+		fidto.setName(name);
+		
+		
+		findIDDAO fidao = new findIDDAO();
+		String userId = fidao.findID(fidto);
+		
+		
+		if(userId != null) {
+			request.setAttribute("userId", userId);
+			request.getRequestDispatcher("/findID_OK.jsp").forward(request, response);
+		} else {
+			response.sendRedirect("findID_NO.jsp");
+		}
+		
+		
+		
+	}
+	
+	
+}

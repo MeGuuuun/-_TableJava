@@ -1,0 +1,22 @@
+package dc.human.kimbanbagi.tableJava.dto;
+
+public class findIDDTO {
+	
+	String email, name;
+	
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getName() {
+		return name;
+	}
+}

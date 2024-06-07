@@ -1,0 +1,62 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+
+public class registerDAO {
+		  private Connection conn;
+			public registerDAO() {
+				try {
+		            Class.forName("oracle.jdbc.OracleDriver");
+
+		            conn = DriverManager.getConnection(
+		                    "jdbc:oracle:thin:@192.168.0.42:1521/xe",
+		                    "c##tableJava",
+		                    "tableJava"
+		            );
+
+						} catch (Exception e) {
+								e.printStackTrace();
+						}
+			}
+				
+				  public void addRestaurant(restaurantDTO restaurant) {
+					    java.util.Date now = new java.util.Date();
+				        Date sqlDate = new Date(now.getTime());   
+
+				        try {
+				        	String sql = "insert into restaurants values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				        		
+				        	PreparedStatement pstmt = conn.prepareStatement(sql);
+				             
+				             pstmt.setString(1, restaurant.getR_id());
+				             pstmt.setString(2, restaurant.getR_name());
+				             pstmt.setString(3, restaurant.getR_head());
+				             pstmt.setString(4, restaurant.getR_city());
+				             pstmt.setString(5, restaurant.getR_address());
+				             pstmt.setString(6, restaurant.getR_number());
+				             pstmt.setBinaryStream(7, restaurant.getR_photo());
+				             pstmt.setString(8, restaurant.getU_id());
+				             pstmt.setString(9, restaurant.getR_status());
+				             pstmt.setString(10, restaurant.getW_status());
+				             pstmt.setDate(11, sqlDate);
+				             pstmt.setString(12, restaurant.getU_id());
+				             pstmt.setDate(13, sqlDate);
+				             pstmt.setString(14, restaurant.getU_id());
+				            
+				             pstmt.executeUpdate();
+				             
+				             } catch (SQLException e) {
+				             System.out.println(e.getMessage());
+				        }
+				    }
+				}
+

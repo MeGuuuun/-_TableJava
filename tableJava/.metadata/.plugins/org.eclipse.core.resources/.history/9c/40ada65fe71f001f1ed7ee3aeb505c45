@@ -1,0 +1,69 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>예약 화면</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<form action="book" method="post" id="frm">
+	<div id="container">
+		<div id="store_div">
+			<div>사진</div>
+			<div>가게 정보<br></div>
+		</div>
+		<div id="book_div">
+			인원 <br>
+			성인
+			<span id="a_count" name="adultCount">0</span>
+			<button type="button" id="increaseCount">+</button>
+    		<button type="button" id="decreaseCount">-</button>
+    		유아
+    		<span id="k_count" name="kidCount">0</span>
+			<button type="button" id="increaseCount">+</button>
+    		<button type="button" id="decreaseCount">-</button>
+    		유모차
+    		<span id="s_count" name="stroller">0</span>
+			<button type="button" id="increaseCount">+</button>
+    		<button type="button" id="decreaseCount">-</button>
+    		휠체어
+    		<span id="w_count" name="wheelchair">0</span>
+			<button type="button" id="increaseCount">+</button>
+    		<button type="button" id="decreaseCount">-</button>
+    		<button type="submit" id="submitBtn">제출</button>
+		</div>
+		<script>
+			$(document).ready(function() {
+		  		var count = parseInt($("#count").text());
+
+		  		$('#increaseCount').on('click', function(event) {
+		    		event.preventDefault(); // 기본 동작 방지
+
+		    		count++;
+		    		$('#count').text(count); // 숫자 업데이트
+		  		});
+
+		  		$('#decreaseCount').on('click', function(event) {
+		    		event.preventDefault(); // 기본 동작 방지
+					
+		    		if(count > 0) {
+		    			count--;
+			    		$('#count').text(count); // 숫자 업데이트
+		    		}
+		    		
+		  		});
+		  		
+		  		$('#submitBtn').on('click', function(event) {
+		  		    event.preventDefault(); // 기본 동작 방지
+
+		  		    // 제출 버튼 클릭 시 form submit
+		  		    $('#frm').submit();
+		  		});
+			});
+		</script>
+	</div>
+</form>
+</body>
+</html>

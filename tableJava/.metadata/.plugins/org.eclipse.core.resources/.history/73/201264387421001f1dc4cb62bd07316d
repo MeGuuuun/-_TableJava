@@ -1,0 +1,43 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class testDAO {
+private Connection conn;
+	
+	public testDAO() {
+		try {
+				Class.forName("oracle.jdbc.OracleDriver");
+				
+				conn = DriverManager.getConnection(
+						"jdbc:oracle:thin:@192.168.0.42:1521/xe",
+						"c##tableJava",
+						"tableJava"
+				);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void photo(testDTO dto) {
+		InputStream is = dto.getInputStream();
+		
+		try {
+			String sql = "INSERT INTO restaurant (restaurant_photo) VALUES (?) WHERE restaurant_id='123-456-78950'";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setBinaryStream(1, is);
+			
+			int row = pstmt.executeUpdate();
+			System.out.println("변경된 행의 수 : " +row);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

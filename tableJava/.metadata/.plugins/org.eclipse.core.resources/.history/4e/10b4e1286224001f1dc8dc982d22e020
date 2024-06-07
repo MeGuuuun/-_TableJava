@@ -1,0 +1,93 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import dc.human.kimbanbagi.tableJava.common.DBConnectionManager;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+
+public class loginDAO {
+	private Connection conn;
+	
+	public UserDTO match(UserDTO dto) {
+		String id=dto.getuId();
+		String pwd=dto.getPwd();
+		int cnt;
+		
+		UserDTO udto = null;
+		
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "SELECT COUNT(*) AS cnt FROM users WHERE user_id=? AND user_pwd=?"; 
+			
+			PreparedStatement pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pwd);
+			
+			ResultSet rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				cnt=rs.getInt("cnt");
+				
+				// 로그인 정보 대조 성공
+				if(cnt==1) {
+					
+				
+				// 로그인 정보 대조 실패
+				}else {
+					System.out.println("정보를 찾지못했습니다.");
+				}
+			}
+			
+			conn.close();
+			pstmt.close();
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return udto;
+	}
+	
+	// user_role( 사용자 or 사장님 )과 store_register(식당 등록 여부) 확인하는 메소드
+	public UserDTO getRole(String id) {
+		UserDTO dto = new UserDTO();
+		
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql= "SELECT u.user_role, u.store_register, r.restaurant_id " +
+								"FROM users u, restaurants r WHERE u.user_id=r.user_id AND u.user_id=?";
+			
+			PreparedStatement pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
+			ResultSet rs=pstmt.executeQuery();
+			
+			 while (rs.next()) {
+				 dto.setRole(rs.getString("u.user_role"));
+				 dto.setRegister(rs.getString("u.store_register"));
+				 dto.setrId(rs.getString("r.restaurant_id"));
+			 }
+			
+			 conn.close();
+			 pstmt.close();
+			 rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		 return dto;
+	}
+	
+	// restaurant_id 얻는 메소드
+	public String getRid(String id) {
+		
+	}
+
+}

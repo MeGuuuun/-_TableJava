@@ -1,0 +1,61 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+public class restaurantDAO {
+	private Connection conn;
+
+	public restaurantDAO() {
+		try {
+        Class.forName("oracle.jdbc.OracleDriver");
+
+        conn = DriverManager.getConnection(
+                "jdbc:oracle:thin:@192.168.0.42:1521/xe",
+                "c##tableJava",
+                "tableJava"
+        );
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//식당 상세 정보를 모두 가져오는 메소드
+	public List<restaurantDTO> getRestaurantDetail(String name) {
+		List<restaurantDTO> resList = new ArrayList<>();
+		try {
+			String sql = "SELECT restaurant_city FROM restaurants WHERE restaurant_name= ";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//사용자가 이용 완료한 식당 리스트 가져오는 메소드
+	public void restaurantHistory() {
+		
+	}
+	
+	//사장님 메인 화면에 본인이 등록한 가게 정보 뜨게 하는 메소드
+	public void getOwnerRestaurant() {
+		
+	}
+	
+	//사용자 위치 기반 주위 식당 정보를 뜨게 하는 메소드
+	public void restaurantAround() {
+		
+	}
+}

@@ -1,0 +1,117 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>예약 화면</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<form action="book" method="post" id="frm">
+	<div id="container">
+		<div id="store_div">
+			<div>사진</div>
+			<div>가게 정보<br></div>
+		</div>
+		<div id="book_div">
+			인원 <br>
+			성인
+			<span id="a_count" name="adultCount">0</span>
+			<button type="button" id="a_increaseCount">+</button>
+    		<button type="button" id="a_decreaseCount">-</button>
+    		<input type="hidden">
+    		유아
+    		<span id="k_count" name="kidCount">0</span>
+			<button type="button" id="k_increaseCount">+</button>
+    		<button type="button" id="k_decreaseCount">-</button>
+    		유모차
+    		<span id="s_count" name="stroller">0</span>
+			<button type="button" id="s_increaseCount">+</button>
+    		<button type="button" id="s_decreaseCount">-</button>
+    		휠체어
+    		<span id="w_count" name="wheelchair">0</span>
+			<button type="button" id="w_increaseCount">+</button>
+    		<button type="button" id="w_decreaseCount">-</button>
+    		
+    		<input type="text" name="test"></span>
+    		<button type="submit" id="submitBtn">제출</button>
+		</div>
+		<script>
+			$(document).ready(function() {
+				var a_count = parseInt($("#a_count").text()); // 성인 인원
+			    var k_count = parseInt($("#k_count").text()); // 유아 인원
+			    var s_count = parseInt($("#s_count").text()); // 유모차 개수
+			    var w_count = parseInt($("#w_count").text()); // 휠체어 개수
+
+			 // 성인 인원 증가/감소
+			    $('#a_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        a_count++;
+			        $("#a_count").text(a_count);
+			    });
+
+			    $('#a_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (a_count > 0) {
+			            a_count--;
+			            $("#a_count").text(a_count);
+			        }
+			    });
+
+			    // 유아 인원 증가/감소
+			    $('#k_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        k_count++;
+			        $("#k_count").text(k_count);
+			    });
+
+			    $('#k_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (k_count > 0) {
+			            k_count--;
+			            $("#k_count").text(k_count);
+			        }
+			    });
+
+			    // 유모차 개수 증가/감소
+			    $('#s_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        s_count++;
+			        $("#s_count").text(s_count);
+			    });
+
+			    $('#s_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (s_count > 0) {
+			            s_count--;
+			            $("#s_count").text(s_count);
+			        }
+			    });
+
+			    // 휠체어 개수 증가/감소
+			    $('#w_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        w_count++;
+			        $("#w_count").text(w_count);
+			    });
+
+			    $('#w_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (w_count > 0) {
+			            w_count--;
+			            $("#w_count").text(w_count);
+			        }
+			    });
+				
+			    // 제출 버튼 클릭 시 form submit
+			    $('#submitBtn').on('click', function(event) {
+			        event.preventDefault();
+			        $('#frm').submit();
+			    });
+			});
+		</script>
+	</div>
+</form>
+</body>
+</html>

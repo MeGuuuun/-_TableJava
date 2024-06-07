@@ -1,0 +1,29 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class testDAO {
+private Connection conn;
+	
+	public testDAO() {
+		try {
+				Class.forName("oracle.jdbc.OracleDriver");
+				
+				conn = DriverManager.getConnection(
+						"jdbc:oracle:thin:@192.168.0.42:1521/xe",
+						"c##tableJava",
+						"tableJava"
+				);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void photo(testDTO dto) {
+		
+	}
+}

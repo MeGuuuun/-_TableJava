@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>아이디 찾기 성공</title>
+<link rel="stylesheet" type="text/css" href="css/findID_ON.css">
+</head>
+<body>
+    <div class="container">
+        <h1>아이디 찾기 결과</h1>
+        <p>고객님의 아이디는 <strong>${userId}</strong>입니다.</p>
+        <button onclick="location.href='login.jsp'">로그인</a></button>
+        <button onclick="location.href='findPW.jsp'">비밀번호 찾기</a></button>
+    </div>
+</body>
+</html>

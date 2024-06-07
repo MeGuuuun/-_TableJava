@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>예약 화면</title>
+</head>
+<body>
+<form action="book" method="post">
+	<div id="container">
+		<div id="store_div">
+			<div>사진</div>
+			<div>가게 정보<br></div>
+		</div>
+		<div id="book_div">
+		</div>
+	</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,7 @@
+INDEX VERSION 1.134
+C:\Users\admin\Desktop\tableJava\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2875501188.index
+\kimbanbagi\src\main\java
+C:\Users\admin\Desktop\tableJava\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2148654438.index
+\kimbanbagi\src\main\java
+C:\Users\admin\Desktop\tableJava\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1200183264.index
+\kimbanbagi\src\main\java

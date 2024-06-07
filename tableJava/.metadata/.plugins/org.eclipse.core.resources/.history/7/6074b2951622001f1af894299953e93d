@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+  <display-name>kimbanbagi</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>bookList</display-name>
+    <servlet-name>bookList</servlet-name>
+    <servlet-class>dc.human.kimbanbagi.tableJava.servlet.bookList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>bookList</servlet-name>
+    <url-pattern>/bookList</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>bookListServlet</display-name>
+    <servlet-name>bookListServlet</servlet-name>
+    <servlet-class>dc.human.kimbanbagi.tableJava.servlet.bookListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>bookListServlet</servlet-name>
+    <url-pattern>/bookList</url-pattern>
+  </servlet-mapping>
+</web-app>

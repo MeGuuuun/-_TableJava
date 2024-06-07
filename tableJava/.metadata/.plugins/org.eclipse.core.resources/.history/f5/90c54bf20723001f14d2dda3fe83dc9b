@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 메인 화면</title>
+    <link rel="stylesheet" type="text/css" href="css/userMain.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NAVER_CLIENT_ID"></script>
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <button onclick="navigate('main')">메인 화면</button>
+        <button onclick="navigate('reservation')">예약 화면</button>
+        <button onclick="navigate('alerts')">알림 화면</button>
+        <button onclick="navigate('mypage')">마이 페이지</button>
+    </div>
+    <div class="search-section">
+        <div class="search-conditions">
+            <label for="search">검색 조건</label>
+            <select id="search-conditions">
+                <option value="restaurant">식당 이름</option>
+                <option value="location">지역</option>
+            </select>
+        </div>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="검색...">
+            <button id="search-button" onclick="search()">🔍</button>
+        </div>
+    </div>
+    <div class="map-section">
+        <div id="map" style="width:100%;height:400px;"></div>
+    </div>
+    <div class="list-section">
+        <ul id="restaurant-list">
+            <!-- 검색 결과 리스트 -->
+        </ul>
+    </div>
+</body>
+</html>

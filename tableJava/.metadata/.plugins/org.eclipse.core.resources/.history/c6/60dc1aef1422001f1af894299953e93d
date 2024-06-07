@@ -1,0 +1,50 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import dc.human.kimbanbagi.tableJava.dao.registerDAO;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.MultipartConfig;
+
+@WebServlet("/register")
+@MultipartConfig
+public class registerServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String restaurantId = request.getParameter("restaurantId");
+        String restaurantName = request.getParameter("restaurantName");
+        String restaurantHead = request.getParameter("restaurantHead");
+        String restaurantCity = request.getParameter("restaurantCity");
+        String restaurantAddress = request.getParameter("restaurantAddress");
+        String restaurantNumber = request.getParameter("restaurantNumber");
+        String userId = request.getParameter("userId");
+        String reservationAvailable = request.getParameter("reservationAvailable");
+        String waitingAvailable = request.getParameter("waitingAvailable");
+        Part imagePart = request.getPart("restaurantPhoto");
+
+        InputStream inputStream = imagePart.getInputStream();
+
+        restaurantDTO dto = new restaurantDTO();
+        
+        
+        dto.setR_id(restaurantId);
+        dto.setR_name(restaurantName);
+        dto.setR_head(restaurantHead);
+        dto.setR_city(restaurantCity);
+        dto.setR_address(restaurantAddress);
+        dto.setR_number(restaurantNumber);
+        dto.setU_id(userId);
+        dto.setR_status(reservationAvailable);
+        dto.setW_status(waitingAvailable);
+        dto.setR_photo(inputStream);
+       
+
+        registerDAO dao = new registerDAO();
+        dao.addRestaurant(dto);
+
+        response.sendRedirect("register_ok.jsp");
+    }
+}

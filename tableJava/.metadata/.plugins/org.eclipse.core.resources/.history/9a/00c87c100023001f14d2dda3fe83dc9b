@@ -1,0 +1,42 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import java.io.IOException;
+
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id=request.getParameter("user_id");
+		String pwd=request.getParameter("user_pwd");
+		
+		
+		UserDTO dto= new UserDTO();
+		dto.setId(id);
+		dto.setPwd(pwd);
+		
+		loginDAO dao= new loginDAO();
+		RoleDTO rdto=dao.match(dto);
+		String job=rdto.getRole();
+		
+		/*
+		if(job.equals("1")) {
+			response.sendRedirect("checking.jsp");  //1이면 사용자 메인화면 이동
+		}else {
+			response.sendRedirect("sajang.jsp"); //2이면 사장님 메인화면 이동
+		}
+		*/
+		
+
+	}
+
+}

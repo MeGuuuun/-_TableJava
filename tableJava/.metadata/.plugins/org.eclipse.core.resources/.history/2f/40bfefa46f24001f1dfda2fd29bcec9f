@@ -1,0 +1,58 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.*;
+import java.util.*;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/OwnerBookList")
+public class OwnerBookListServlet extends HttpServlet {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("utf-8");
+		
+		String uId = request.getParameter("userID");
+		String rId = request.getParameter("restaurantId");
+		
+		String action = request.getParameter("action");
+		
+		
+		if(action.equals("status")) {
+			String status = request.getParameter("status");
+			
+			bookDAO dao = new bookDAO();
+			dao.changeStatus(status, uId, rId);
+			
+			response.sendRedirect("userBookList.jsp");
+			
+		} else if(action.equals("getInfo")) {
+			bookDAO dao = new bookDAO();
+
+			List<BookDTO> bookList = dao.getBookList(uId);
+			
+			request.setAttribute("bookList", bookList);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/userBookList.jsp");
+			dispatcher.forward(request, response);
+			
+		} else if(action.equals("ownerBook")) {
+			
+			bookDAO dao = new bookDAO();
+			
+			List<BookDTO> bookList = dao.getOwnerList(rId);
+			
+			request.setAttribute("bookList", bookList);
+			request.getRequestDispatcher("/ownerBookList.jsp").forward(request, response);
+		}
+	}
+
+}

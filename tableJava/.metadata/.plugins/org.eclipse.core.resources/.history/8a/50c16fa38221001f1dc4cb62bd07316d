@@ -1,0 +1,77 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import dc.human.kimbanbagi.tableJava.dto.registerDTO;
+
+
+public class registerDAO {
+		  private Connection conn;
+			public registerDAO() {
+				try {
+		            Class.forName("oracle.jdbc.OracleDriver");
+
+		            conn = DriverManager.getConnection(
+		                    "jdbc:oracle:thin:@192.168.0.42:1521/xe",
+		                    "c##tableJava",
+		                    "tableJava"
+		            );
+
+						} catch (Exception e) {
+								e.printStackTrace();
+						}
+			}
+				
+				  public void addRestaurant(registerDTO restaurant) {
+					    java.util.Date now = new java.util.Date();
+				        Date sqlDate = new Date(now.getTime());
+				        
+				        String id=restaurant.getRestaurantId();
+				        String name=restaurant.getRestaurantName();
+				        String head=restaurant.getRestaurantHead();
+				        String city=restaurant.getRestaurantCity();
+				        String address=restaurant.getRestaurantAddress();
+				        String number=restaurant.getRestaurantNumber();
+				        InputStream photo=restaurant.getRestaurantPhoto();
+				        String userId=restaurant.getUserId();
+				        String reservation=restaurant.getReservationAvailable();
+				        String waiting=restaurant.getWaitingAvailable();
+				        
+				        		
+
+				        try {
+				        	String sql = "INSERT INTO restaurants VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				        		
+				             PreparedStatement pstmt = conn.prepareStatement(sql);
+				             
+				             pstmt.setString(1, id);
+				             pstmt.setString(2, name);
+				             pstmt.setString(3, head);
+				             pstmt.setString(4, city);
+				             pstmt.setString(5, address);
+				             pstmt.setString(6, number);
+				             pstmt.setBinaryStream(7, photo);
+				             pstmt.setString(8, userId);
+				             pstmt.setString(9, reservation);
+				             pstmt.setString(10, waiting);
+				             pstmt.setDate(11, sqlDate);
+				             pstmt.setString(12, userId );
+				             pstmt.setDate(13, sqlDate);
+				             pstmt.setString(14, userId);
+				             
+				             System.out.println(sql);
+				             
+				             pstmt.executeUpdate();
+				             
+				             } catch (SQLException e) {
+				             System.out.println(e.getMessage());
+				        }
+				    }
+				}
+
