@@ -62,7 +62,9 @@ public class OwnerBookListServlet extends HttpServlet {
 			String status = request.getParameter("status");
 			
 			if(dao.changeStatus(status, userId, restaurantId) != 0) {
-				response.sendRedirect("ownerBookList.jsp");
+				request.setAttribute("userId", userId);
+				request.setAttribute("restaurantId", restaurantId);
+				request.getRequestDispatcher("/ownerBookList.jsp").forward(request, response);
 			}else {
 				// 예약 상태 변경 관련 sql문 오류 시 처리 코드 작성
 			}

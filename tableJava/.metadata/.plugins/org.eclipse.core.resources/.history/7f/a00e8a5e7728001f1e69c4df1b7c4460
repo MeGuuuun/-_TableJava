@@ -1,0 +1,29 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : OwnerWaitListServlet.java
+PROGRAM NAME    : 사장님 웨이팅 내역 리스트
+DESCRIPTION    : 사장님의 웨이팅 내역을 보여주고 관리 함
+AUTHOR        : 반재홍
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   반재홍        init
+
+*/
+
+@WebServlet("/OwnerWaitList")
+public class OwnerWaitListServlet extends HttpServlet {
+	
+
+}

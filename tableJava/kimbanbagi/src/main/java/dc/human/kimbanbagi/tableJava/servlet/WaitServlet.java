@@ -35,34 +35,50 @@ public class WaitServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
+		String action = request.getParameter("action");
+		
 		String userId = request.getParameter("userId");
 		String restaurantId = request.getParameter("restaurantId");
-		String phoneNumber = request.getParameter("phoneNumber");
 		String restaurantName = request.getParameter("restaurantName");
-		String headCount = request.getParameter("headCount");
 		
-		WaitDTO wait = new WaitDTO();
+		WaitDAO dao = new WaitDAO();
 		
-		wait.setUserId(userId);
-		wait.setRestaurantId(restaurantId);
-		wait.setPhoneNumber(phoneNumber);
-		wait.setRestaurantName(restaurantName);
-		wait.setHeadCount(headCount);
-		
-		// 웨이팅 상태 > "0" 웨이팅 중 / "1" 고객 호출 / "2" (사용자) 웨이팅 취소 / "3" (사장님) 웨이팅 취소 / "4" 착석 완료
-        wait.setWaitingStatus("0");
-        
-        WaitDAO dao = new WaitDAO();
-        
-        // 웨이팅 신청 성공 시 성공 화면으로 이동
-        if(dao.addWaiting(wait)!=0) {
-        	// *alert 형식으로 변경 후 바로 userWaitList로 이동하는 방법 고려
-             request.getRequestDispatcher("/waitSuccess.jsp").forward(request, response);
-        } else {
-        	// sql문 오류 시 처리 코드 작성
-        }
-        
-
+		// 앞에 대기 팀이 몇 번 있는지 알려주는 메소드
+		if(action.equals("waitBtn")) {
+			String waitingNumber = dao.getNextWaitingNumber(restaurantId);
+			
+			request.setAttribute("waitNumber", waitingNumber);
+			request.setAttribute("restaurantId", restaurantId);
+			request.setAttribute("restaurantName", restaurantName);
+			request.setAttribute("userId", userId);
+			request.getRequestDispatcher("wait.jsp").forward(request, response);
+			
+		} else if(action.equals("addBook")) {
+			
+			String phoneNumber = request.getParameter("phoneNumber");
+			String headCount = request.getParameter("headCount");
+			String waitNumber = request.getParameter("waitNumber");
+			
+			WaitDTO dto = new WaitDTO();
+			
+			dto.setUserId(userId);
+			dto.setPhoneNumber(phoneNumber);
+			dto.setRestaurantId(restaurantId);
+			dto.setRestaurantName(restaurantName);
+			dto.setHeadCount(headCount);
+			dto.setWaitingNumber(waitNumber);
+			
+			// 웨이팅 상태 > "0" 웨이팅 중 / "1" 고객 호출 / "2" (사용자) 웨이팅 취소 / "3" (사장님) 웨이팅 취소 / "4" 착석 완료
+	        dto.setWaitingStatus("0");
+	        
+	     // 웨이팅 신청 성공 시 성공 화면으로 이동
+	        if(dao.addWaiting(dto)!=0) {
+	        	request.setAttribute("userId", userId);
+	             request.getRequestDispatcher("/waitSuccess.jsp").forward(request, response);
+	        } else {
+	        	// sql문 오류 시 처리 코드 작성
+	        }
+		}
        
 	}
 

@@ -5,7 +5,6 @@
 <head>
 <meta charset="utf-8">
 <title>로그인 페이지</title>
-<link rel="stylesheet" type="text/css" href="css/login.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>

@@ -15,11 +15,11 @@ function confirmStatus(rId, uId) {
 	
 	$.ajax({
         type: "POST",
-        url: "bookList",
+        url: "OwnerBookList",
         data: { action: "status", status: status, userId : userId, restaurantId : restaurantId },
         success: function(response) {
             alert("예약 확정되었습니다.");
-            $("#confirmBtn").prop(disabled, true);
+           	window.location.reload();
         },
         error: function() {
             alert("예약 확정에 실패했습니다. 다시 시도해주세요.");
@@ -34,11 +34,11 @@ function cancelStatus(rId, uId) {
    
     $.ajax({
         type: "POST",
-        url: "bookList",
+        url: "OwnerBookList",
         data: { action: "status", status: status, userId : userId, restaurantId : restaurantId },
         success: function(response) {
             alert("예약 취소되었습니다.");
-            $("#cancelBtn").prop(disabled, true);
+            window.location.reload();
         },
         error: function() {
             alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
@@ -60,8 +60,16 @@ function cancelStatus(rId, uId) {
             <form method="POST" action="MyPage">
             	<input type="hidden" name="userId" value="${userId }">
             	<input type="hidden" name="restaurantId" value="${restaurantId }">
-            	<button onclick="location.href='myPage.jsp'">마이 페이지</button>
+            	<button type="submit" name="action" value="getOwnerInfo">마이 페이지</button>
             </form>
+    </div>
+    <div>
+    	<button onclick="location.reload()">예약 내역</button>
+    	<form method="post" action="OwnerWaitList">
+    		<input type="hidden" name="userId" value="${userId }">
+    		<input type="hidden" name="restaurantId" value="${restaurantId }">
+    		<button type="submit" name="action" value="waitList">웨이팅 내역</button>
+    	</form>
     </div>
 	<h1>예약 내역</h1>
 	<form method="post" action="OwnerBookList">

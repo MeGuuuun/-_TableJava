@@ -124,8 +124,8 @@ public class RestaurantDAO {
 					+ "				restaurant_city,"
 					+ "				restaurant_address,"
 					+ "				restaurant_number,"
-					+ "				reservation_available,"
-					+ "				waiting_available "
+					+ "				DECODE(reservation_available, '0', '불가능', '1', '가능') r_status,"
+					+ "				DECODE(waiting_available, '0', '불가능', '1', '가능') w_status "
 					+ "FROM restaurants "
 					+ "WHERE restaurant_id=?";
 			
@@ -139,8 +139,8 @@ public class RestaurantDAO {
 				dto.setR_city(rs.getString("restaurant_city"));
 				dto.setR_address(rs.getString("restaurant_address"));
 				dto.setR_number(rs.getString("restaurant_number"));
-				dto.setR_status(rs.getString("reservation_available"));
-				dto.setW_status(rs.getString("waiting_available"));
+				dto.setR_status(rs.getString("r_status"));
+				dto.setW_status(rs.getString("w_status"));
 			}
 			
 			conn.close();
@@ -209,8 +209,8 @@ public class RestaurantDAO {
 					+ "				restaurant_city,"
 					+ "				restaurant_address,"
 					+ "				restaurant_number,"
-					+ "				reservation_available,"
-					+ "				waiting_available "
+					+ "				DECODE(reservation_available, '0', '불가능', '1', '가능') r_status,"
+					+ "				DECODE(waiting_available, '0', '불가능', '1', '가능') w_status "
 					+ "FROM restaurants "
 					+ "WHERE restaurant_id=?";
 			
@@ -225,8 +225,8 @@ public class RestaurantDAO {
 				dto.setR_city(rs.getString("restaurant_city"));
 				dto.setR_address(rs.getString("restaurant_address"));
 				dto.setR_number(rs.getString("restaurant_number"));
-				dto.setR_status(rs.getString("reservation_available"));
-				dto.setW_status(rs.getString("waiting_available"));
+				dto.setR_status(rs.getString("r_status"));
+				dto.setW_status(rs.getString("w_status"));
 			}
 			
 			conn.close();

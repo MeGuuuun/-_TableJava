@@ -1,0 +1,45 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>userWaitList</title>
+<script>
+function cancelStatus(rId, uId) {
+    var status = "2";
+    var restaurantId = rId;
+    var userId = uId;
+    
+    $.ajax({
+        type: "POST",
+        url: "bookList",
+        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId },
+        success: function(response) {
+            alert("예약 변경되었습니다.");
+            $("#statusBtn").hide();
+        },
+        error: function() {
+            alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
+        }
+    });
+}
+</script>
+</head>
+<body>
+	<h1>웨이팅 내역</h1>
+	<ul>
+		<c:forEach items="${waitList}" var="wait">
+			<div>
+				<li>
+					웨이팅한 식당 : ${wait.restaurantName} <br>
+					인원수 : ${wait.headCount } <br>	
+					웨이팅 상태 : ${wait.waitingStatus } <br>
+					웨이팅숫자 : ${wait.waitingNumber} <br>
+				</li>
+			</div>
+		</c:forEach>
+	</ul>
+</body>
+</html>

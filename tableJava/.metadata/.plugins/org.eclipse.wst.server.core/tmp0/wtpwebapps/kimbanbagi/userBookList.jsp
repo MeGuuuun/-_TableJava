@@ -15,11 +15,11 @@ function cancelStatus(rId, uId) {
     
     $.ajax({
         type: "POST",
-        url: "bookList",
-        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId },
+        url: "UserBookList",
+        data: { action: "status", status : status, userId : userId, restaurantId : restaurantId },
         success: function(response) {
-            alert("예약 변경되었습니다.");
-            $("#statusBtn").hide();
+            alert("예약 취소 되었습니다.");
+            window.location.reload();
         },
         error: function() {
             alert("예약 취소에 실패했습니다. 다시 시도해주세요.");
@@ -29,22 +29,25 @@ function cancelStatus(rId, uId) {
 	
 </script>
 </head>
-<body onload="submitForm()">
+<body>
 	<div class="navbar">
 		<form method="post" action="userMain">
 			<input type="hidden" name="userId" value="${userId }">
-			<button type="submit" name="action">메인 화면</button>
+			<button type="submit">메인 화면</button>
 		</form>
         <button onclick="location.reload()">예약/웨이팅</button>
         <button onclick="location.href='notification.jsp'">알림</button>
         <form method="post" action="MyPage">
         	<input type="hidden" name="userId" value="${userId }">
-        	<button onclick="location.href='myPage.jsp'">마이 페이지</button>
+        	<button type="submit" name="action" value="getUserInfo">마이 페이지</button>
         </form>
     </div>
     
-	<button onclick="location.href='userBookList.jsp'">예약 내역</button>
-	<button onclick="location.href='userWaitList.jsp'">웨이팅 내역</button>
+	<button onclick="location.reload()">예약 내역</button>
+	<form method="post" action="UserWaitList">
+		<input type="hidden" name="userId" value="${userId }">
+		<button type="submit" name="action" value="waitList">웨이팅 내역</button>
+	</form>
 	
 	<h1>예약 내역</h1>
 	<ul>
@@ -63,7 +66,7 @@ function cancelStatus(rId, uId) {
 					예약 상태 : ${book.status }
 				</div>
 				<div>
-					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${book.user_id }')" id="statusBtn">예약 취소</button>
+					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${userId }')" id="statusBtn">예약 취소</button>
 				</div>
 			</div>
 		</c:forEach>

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/join.css">
 <script src="jquery-1.11.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css/join.css">
 <script>
 
 //아이디 중복 체크 메소드
@@ -64,8 +65,11 @@ function validateForm() {
 </script>
 </head>
 <body>
+<div class="logo_image">
+	<img src="image/logo.png">
+</div>
 
-<h1>회원가입</h1>
+<div class="container">
 	<form action="join" method="post" onsubmit="return validateForm()">
 		ID:<br>
 		<input type="text" name="userID" id = "userId">
@@ -86,10 +90,16 @@ function validateForm() {
 		<input type="text" name="userName"><br>
 		번호:<br>
 		<input type="text" name="userNumber"><br>
-		<label><input type="radio" name="role" value="customer" checked>손님</label>
-		<label><input type="radio" name="role" value="owner">사장님</label><br>
-		<button type="submit" name="action" value="join">회원가입</button>
+		<div class ="select">
+			<input type="radio" id="customer" name="role" value="customer" checked>
+			<label for="customer">손님</label>
+			<input type="radio" id="owner" name="role" value="owner">
+			<label for="owner">사장님</label>
+		</div>
+		<div class="join_button">
+			<button type="submit" name="action" value="join">회원가입</button>
+		</div>
 	</form>
-	
+</div>
 </body>
 </html>

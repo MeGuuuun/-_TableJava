@@ -76,9 +76,10 @@
             	<button type="submit" name="action" value="bookList">예약/웨이팅</button>
             </form>
             <button onclick="location.href='notification.jsp'">알림 화면</button>
-            <form method="POST" action="ownerMain">
+            <form method="POST" action="MyPage">
             	<input type="hidden" name="userId" value="${userId }">
-            	<button onclick="location.href='myPage.jsp'">마이 페이지</button>
+            	<input type="hidden" name="restaurantId" value="${restaurantId }">
+            	<button type="submit" name="action" value="getOwnerInfo">마이 페이지</button>
             </form>
         </div>
             <div class="info">

@@ -7,6 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
 /*
 
 PROJECT        : tablejava
@@ -33,7 +36,31 @@ public class MyPageServlet extends HttpServlet {
         // jsp에서 보낸 request 읽기
         String userId = request.getParameter("userId");
         
+        String action = request.getParameter("action");
+        
+        MyPageDAO dao = new MyPageDAO();
+        
         // users 테이블에서 회원 정보 끌어오는 메소드 만들어서 myPage.jsp로 보내는 코드 작성
+        // 사장님 정보 가져오는 메소드
+        if(action.equals("getOwnerInfo")) {
+        	String restaurantId = request.getParameter("restaurantId");
+        	
+        	UserDTO dto = dao.getUserInfo(userId);
+        	
+        	request.setAttribute("user", dto);
+        	request.setAttribute("userId", userId);
+        	request.setAttribute("restaurantId", restaurantId);
+        	request.getRequestDispatcher("ownerMyPage.jsp").forward(request, response);
+        
+        	// 사용자 정보 가져오는 메소드	
+        }else if(action.equals("getUserInfo")) {
+        	UserDTO dto = dao.getUserInfo(userId);
+        	
+        	request.setAttribute("user", dto);
+        	request.setAttribute("userId", userId);
+        	request.getRequestDispatcher("userMyPage.jsp").forward(request, response);
+        }
+        
     }
 
 }

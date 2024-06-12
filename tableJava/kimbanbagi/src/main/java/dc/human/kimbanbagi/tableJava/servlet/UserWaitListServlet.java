@@ -36,11 +36,30 @@ public class UserWaitListServlet extends HttpServlet {
 		// jsp에서 보낸 request 읽어오기
 		String userId = request.getParameter("userId");
 		
-		WaitDAO dao = new WaitDAO();
-		List<WaitDTO> waitList = dao.getWaitingList(userId);
+		String action = request.getParameter("action");
 		
-		request.setAttribute("waitList", waitList);
-		request.getRequestDispatcher("/userWaitList.jsp").forward(request, response);
+		WaitDAO dao = new WaitDAO();
+		
+		// 사용자의 웨이팅 리스트를 보여주는 선택지
+		if(action.equals("waitList")){
+			List<WaitDTO> waitList = dao.getWaitingList(userId);
+			
+			request.setAttribute("userId", userId);
+			request.setAttribute("waitList", waitList);
+			request.getRequestDispatcher("/userWaitList.jsp").forward(request, response);
+			
+		// 웨이팅 상태 변경 처리 메소드
+		}else if (action.equals("status")) {
+			String restaurantId = request.getParameter("restaurantId");
+			
+			String status = request.getParameter("status");
+			
+			if(dao.changeStatus(status, userId, restaurantId) != 0 ) {
+				//
+			} else {
+				// 웨이팅 상태 변경 관련 sql문 오류 시 처리 코드 작성
+			}
+		}
 	}
 
 }
