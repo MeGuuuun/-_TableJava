@@ -13,6 +13,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : WaitServlet.java
+PROGRAM NAME    : 웨이팅
+DESCRIPTION    : 웨이팅 관련 servlet
+AUTHOR        : 반재홍
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   반재홍        init
+
+*/
 
 @WebServlet("/wait")
 public class WaitServlet extends HttpServlet {
@@ -22,36 +36,34 @@ public class WaitServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		
 		String userId = request.getParameter("userId");
-		String phoneNumber = request.getParameter("phoneNumber");
 		String restaurantId = request.getParameter("restaurantId");
+		String phoneNumber = request.getParameter("phoneNumber");
 		String restaurantName = request.getParameter("restaurantName");
-		int headCount = Integer.parseInt(request.getParameter("headCount"));
+		String headCount = request.getParameter("headCount");
 		
 		WaitDTO wait = new WaitDTO();
+		
 		wait.setUserId(userId);
-		wait.setPhoneNumber(phoneNumber);
 		wait.setRestaurantId(restaurantId);
+		wait.setPhoneNumber(phoneNumber);
 		wait.setRestaurantName(restaurantName);
 		wait.setHeadCount(headCount);
-        wait.setWaitingStatus("WAITING");
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentDate = sdf.format(new Date());
-        wait.setCreatedDate(currentDate);
-        wait.setCreatedId(userId);
-        wait.setUpdatedDate(currentDate);
-        wait.setUpdatedId(userId);
+		
+		// 웨이팅 상태 > "0" 웨이팅 중 / "1" 고객 호출 / "2" (사용자) 웨이팅 취소 / "3" (사장님) 웨이팅 취소 / "4" 착석 완료
+        wait.setWaitingStatus("0");
         
         WaitDAO dao = new WaitDAO();
-        dao.addWaiting(wait);
+        
+        // 웨이팅 신청 성공 시 성공 화면으로 이동
+        if(dao.addWaiting(wait)!=0) {
+        	// *alert 형식으로 변경 후 바로 userWaitList로 이동하는 방법 고려
+             request.getRequestDispatcher("/waitSuccess.jsp").forward(request, response);
+        } else {
+        	// sql문 오류 시 처리 코드 작성
+        }
         
 
-        List<WaitDTO> waitingList = dao.getWaitingList(restaurantId);
-        request.setAttribute("waitingList", waitingList);
-        request.setAttribute("restaurantName", restaurantName);
-        request.setAttribute("restaurantId", restaurantId);
-
-        request.getRequestDispatcher("/wait.jsp").forward(request, response);
+       
 	}
 
 }

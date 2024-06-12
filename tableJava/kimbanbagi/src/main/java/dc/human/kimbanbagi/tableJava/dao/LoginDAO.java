@@ -1,6 +1,7 @@
 package dc.human.kimbanbagi.tableJava.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,20 +10,43 @@ import java.sql.SQLException;
 import dc.human.kimbanbagi.tableJava.common.DBConnectionManager;
 import dc.human.kimbanbagi.tableJava.dto.*;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : LoginDAO.java
+PROGRAM NAME    : 로그인
+DESCRIPTION    : 로그인 관련 sql문 처리
+AUTHOR        : 김문정
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   김문정        init
+
+*/
 
 public class LoginDAO {
 	private Connection conn;
+	
+	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	java.util.Date now = new java.util.Date();
+	Date sqlDate = new Date(now.getTime()); 
 	
 	public String match(String uid, String pw) {
 		String id=uid;
 		String pwd=pw;
 		
-		String result = "";
+		String result = null;
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT COUNT(*) AS cnt FROM users WHERE user_id=? AND user_pwd=?"; 
+			// *임시 비밀번호 테이블까지 join하여 대조하는 query문으로 수정
+			String sql = "SELECT "
+					+ "				COUNT(*) AS cnt "
+					+ "FROM users "
+					+ "WHERE user_id=? "
+					+ "AND user_pwd=?"; 
 			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -35,7 +59,7 @@ public class LoginDAO {
 				
 				// 로그인 정보 대조 성공
 				if(cnt==1) {
-					result = getRole(id);
+					result = getRole(id); // 로그인한 사람이 사용자인지, 사장님인지 판별하는 메소드
 					
 				// 로그인 정보 대조 실패
 				}else {
@@ -61,7 +85,10 @@ public class LoginDAO {
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql= "SELECT user_role FROM users WHERE user_id=?";
+			String sql= "SELECT "
+					+ "				user_role "
+					+ "FROM users "
+					+ "WHERE user_id=?";
 			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -90,7 +117,11 @@ public class LoginDAO {
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT store_register FROM users WHERE user_id=?";
+			String sql = "SELECT "
+					+ "store_register "
+					+ "FROM users "
+					+ "WHERE user_id=?";
+			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			
@@ -119,7 +150,11 @@ public class LoginDAO {
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT restaurant_id FROM restaurants WHERE user_id=?";
+			String sql = "SELECT "
+					+ "				restaurant_id "
+					+ "FROM restaurants "
+					+ "WHERE user_id=?";
+			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			

@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>검색어 > ${keywords }</h1>
+	<div class="search_result">
+		<c:forEach items="${searchResult }" var="result">
+			<div>
+				식당 이름 : ${book.r_name } <br>
+				식당 위치 : ${book.r_city } <br>
+			</div>
+		</c:forEach>
+	</div>
+</body>
+</html>

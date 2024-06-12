@@ -6,8 +6,28 @@ import java.util.Random;
 import dc.human.kimbanbagi.tableJava.dto.*;
 import dc.human.kimbanbagi.tableJava.common.DBConnectionManager;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : tempoPWDAO.java
+PROGRAM NAME    : 임시 비밀번호 
+DESCRIPTION    : 임시 비밀번호 관련 sql문 처리
+AUTHOR        : 박지민
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   박지민        init
+
+*/
+
 public class TempoPWDAO {
 	private Connection conn;
+	int row=0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
+
+	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	java.util.Date now = new java.util.Date();
+	Date sqlDate = new Date(now.getTime()); 
 	
 	// 사용자가 입력한 정보와 일치하는 회원 정보가 있는지 확인하는 메소드
 	public boolean check(UserDTO dto) {
@@ -15,14 +35,17 @@ public class TempoPWDAO {
 		String name = dto.getName();
 		
 		boolean result=false;
-		int cnt;
+		int cnt=0;
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "" +
-									"SELECT COUNT(*) AS cnt FROM users " +
-									"WHERE user_id=? AND user_name=?";
+			String sql = "SELECT "
+					+ "				COUNT(*) AS cnt "
+					+ "FROM users "
+					+ "WHERE user_id=? "
+					+ "AND user_name=?";
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, id);
@@ -35,8 +58,8 @@ public class TempoPWDAO {
 				
 				// 사용자가 입력한 정보와 일치하는 회원 정보 발견 시 임시 비밀 번호 지급
 				if(cnt == 1) {
-					tempoPW(id);
-					result=true;
+					if(tempoPW(id)!=0) result = true;
+					else System.out.println("임시 비밀번호 지급에 실패했습니다.");
 				}
 				
 			} else {
@@ -55,19 +78,19 @@ public class TempoPWDAO {
 	}
 	
 	// 임시 비밀 번호를 DB에 저장하는 메소드
-	public void tempoPW(String id) {
+	public int tempoPW(String id) {
 		String typedId = id;
 		String tempoPw = randomPW(8);
-		
-		java.util.Date now = new java.util.Date();
-		Date sqlDate = new Date(now.getTime());
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "" +
-								"INSERT INTO temporary_password (user_id, temporary_pwd, created_date, created_id, updated_date, updated_id) " +
-								"VALUES (?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO temporary_password "
+					+ "				user_id,"
+					+ "				temporary_pwd,"
+					+ "				created_date,"
+					+ "				created_id "
+					+ "VALUES (?, ?, ?, ?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			
@@ -75,10 +98,8 @@ public class TempoPWDAO {
 			pstmt.setString(2, tempoPw);
 			pstmt.setDate(3, sqlDate);
 			pstmt.setString(4, typedId);
-			pstmt.setDate(5, sqlDate);
-			pstmt.setString(6, typedId);
 			
-			pstmt.executeUpdate();
+			row = pstmt.executeUpdate();
 			
 			conn.close();
 			pstmt.close();
@@ -87,6 +108,7 @@ public class TempoPWDAO {
 			e.printStackTrace();
 		}
 		
+		return row;
 	}
 	
 	// 영문 + 숫자가 섞인 8자리 문자열 생성 메소드

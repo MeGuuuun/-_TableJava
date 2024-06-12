@@ -7,9 +7,93 @@
 <meta charset="UTF-8">
 <title>예약 화면</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+			$(document).ready(function() {
+				var a_count = parseInt($("#a_count").text()); // 성인 인원
+			    var k_count = parseInt($("#k_count").text()); // 유아 인원
+			    var s_count = parseInt($("#s_count").text()); // 유모차 개수
+			    var w_count = parseInt($("#w_count").text()); // 휠체어 개수
+
+			 // 성인 인원 증가/감소
+			    $('#a_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        a_count++;
+			        $("#a_count").text(a_count);
+			        $('#hiddenAdultCount').val($("#a_count").text());
+			    });
+
+			    $('#a_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (a_count > 0) {
+			            a_count--;
+			            $("#a_count").text(a_count);
+			            $('#hiddenAdultCount').val($("#a_count").text());
+			        }
+			    });
+
+			    // 유아 인원 증가/감소
+			    $('#k_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        k_count++;
+			        $("#k_count").text(k_count);
+			        $('#hiddenKidCount').val($("#k_count").text());
+			    });
+
+			    $('#k_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (k_count > 0) {
+			            k_count--;
+			            $("#k_count").text(k_count);
+			            $('#hiddenKidCount').val($("#k_count").text());
+			        }
+			    });
+
+			    // 유모차 개수 증가/감소
+			    $('#s_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        s_count++;
+			        $("#s_count").text(s_count);
+			        $('#hiddenStroller').val($("#s_count").text());
+			    });
+
+			    $('#s_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (s_count > 0) {
+			            s_count--;
+			            $("#s_count").text(s_count);
+			            $('#hiddenStroller').val($("#s_count").text());
+			        }
+			    });
+
+			    // 휠체어 개수 증가/감소
+			    $('#w_increaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        w_count++;
+			        $("#w_count").text(w_count);
+			        $('#hiddenWheelchair').val($("#w_count").text());
+			    });
+
+			    $('#w_decreaseCount').on('click', function(event) {
+			        event.preventDefault();
+			        if (w_count > 0) {
+			            w_count--;
+			            $("#w_count").text(w_count);
+			            $('#hiddenWheelchair').val($("#w_count").text());
+			        }
+			    });
+				
+			    // 전 페이지로 돌아가기
+			    $("#goBackBtn").on('click', function(event) {
+			    	event.preventDefault();
+			    })
+			});
+		</script>
 </head>
 <body>
 <form action="book" method="post" id="frm">
+	<input type="hidden" name="userId" value="${userId }">
+	<input type="hidden" name="restaurantId" value="${restaurantId }">
+	<input type="hidden" name="restaurantName" value="${restaurantName}">
 	<div id="container">
 		<div id="store_div">
 			<div>사진</div>
@@ -51,91 +135,8 @@
     		<textarea name="requirement" value="요청사항"></textarea>
     		
     		<button id="goBackBtn">뒤로가기</button>
-    		<button type="submit" id="submitBtn">예약하기</button>
+    		<button type="submit" name="action" value="addBook" >예약하기</button>
 		</div>
-		<script>
-			$(document).ready(function() {
-				var a_count = parseInt($("#a_count").text()); // 성인 인원
-			    var k_count = parseInt($("#k_count").text()); // 유아 인원
-			    var s_count = parseInt($("#s_count").text()); // 유모차 개수
-			    var w_count = parseInt($("#w_count").text()); // 휠체어 개수
-
-			 // 성인 인원 증가/감소
-			    $('#a_increaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        a_count++;
-			        $("#a_count").text(a_count);
-			    });
-
-			    $('#a_decreaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        if (a_count > 0) {
-			            a_count--;
-			            $("#a_count").text(a_count);
-			        }
-			    });
-
-			    // 유아 인원 증가/감소
-			    $('#k_increaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        k_count++;
-			        $("#k_count").text(k_count);
-			    });
-
-			    $('#k_decreaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        if (k_count > 0) {
-			            k_count--;
-			            $("#k_count").text(k_count);
-			        }
-			    });
-
-			    // 유모차 개수 증가/감소
-			    $('#s_increaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        s_count++;
-			        $("#s_count").text(s_count);
-			    });
-
-			    $('#s_decreaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        if (s_count > 0) {
-			            s_count--;
-			            $("#s_count").text(s_count);
-			        }
-			    });
-
-			    // 휠체어 개수 증가/감소
-			    $('#w_increaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        w_count++;
-			        $("#w_count").text(w_count);
-			    });
-
-			    $('#w_decreaseCount').on('click', function(event) {
-			        event.preventDefault();
-			        if (w_count > 0) {
-			            w_count--;
-			            $("#w_count").text(w_count);
-			        }
-			    });
-				
-			    // 전 페이지로 돌아가기
-			    $("#goBackBtn").on('click', function(event) {
-			    	event.preventDefault();
-			    })
-			    
-			    // 제출 버튼 클릭 시 form submit
-			    $('#submitBtn').on('click', function(event) {
-			        event.preventDefault();
-			        $('#hiddenAdultCount').val($("#a_count").text());
-			        $('#hiddenKidCount').val($("#k_count").text());
-			        $('#hiddenStroller').val($("#s_count").text());
-			        $('#hiddenWheelchair').val($("#w_count").text());
-			        $('#frm').submit();
-			    });
-			});
-		</script>
 	</div>
 </form>
 </body>

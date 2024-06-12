@@ -30,10 +30,12 @@
 					예약 상태 : 예약 대기
 				</c:otherwise>
 			</c:choose>
+			<br>
 			예약 인원 수 : ${book.a_count + book.k_count } 명 <br>
 			유모차 사용 : ${book.s_count } 개<br>
 			휠체어 사용 : ${book.w_count } 개<br>
 			요청 사항 : ${book.requirement } <br>
 	</form>
+	<!-- 확인 버튼 추가. 클릭 시 예약 내역 리스트 페이지로 이동 -->
 </body>
 </html>

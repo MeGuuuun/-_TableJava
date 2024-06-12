@@ -1,0 +1,25 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import dc.human.kimbanbagi.tableJava.dao.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/search")
+public class SearchServlet extends HttpServlet {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setCharacterEncoding("utf-8");
+		request.setCharacterEncoding("utf-8");
+		
+		String restaurantName = request.getParameter("restaurantName");
+		
+		RestaurantDAO dao = new RestaurantDAO();
+	}
+
+}

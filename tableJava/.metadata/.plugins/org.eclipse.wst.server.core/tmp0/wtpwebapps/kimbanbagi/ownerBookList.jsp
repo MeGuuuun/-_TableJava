@@ -68,7 +68,6 @@ function cancelStatus(rId, uId) {
 	<ul>
 		<c:forEach items="${bookList}" var="book">
 			<div>
-				<li>
 					예약자 : ${book.user_id } <br>
 					예약 날짜 : ${book.date } <br>
 					예약 시간 : ${book.time } <br>
@@ -76,7 +75,6 @@ function cancelStatus(rId, uId) {
 					유모차 사용 : ${book.s_count } 개<br>
 					휠체어 사용 : ${book.w_count } 개<br>
 					요청 사항 : ${book.requirement } <br>
-				</li>
 				<div>
 					예약 상태 : ${book.status }
 				</div>

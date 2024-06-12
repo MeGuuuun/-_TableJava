@@ -10,6 +10,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : OwnerMainServlet.java
+PROGRAM NAME    : 사장님 메인 페이지
+DESCRIPTION    : 사장님 메인 페이지 관련 servlet
+AUTHOR        : 이경민
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   이경민        init
+
+*/
 
 @WebServlet("/ownerMain")
 public class OwnerMainServlet extends HttpServlet {
@@ -20,14 +34,17 @@ public class OwnerMainServlet extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		
-		String userId = (String) request.getAttribute("userId");
-		String restaurantId = (String) request.getAttribute("restaurantId");
+		// jsp에서 request를 읽어온 경우
+		String userId = request.getParameter("userId");
+		String restaurantId = request.getParameter("restaurantId");
 		
-		String uId = request.getParameter("userId");
-		String rId = request.getParameter("restaurantId");
+		// 서블릿에서 request를 읽어온 경우
+		String uId = (String) request.getAttribute("userId");
+		String rId = (String) request.getAttribute("restaurantId");
 		
 		RestaurantDAO dao=new RestaurantDAO();
 		
+		// request로 읽어온 userId와 restaurantId로 사장님의 가게 정보를 가져와 jsp에 보내기
 		if(uId==null) {
 			RestaurantDTO dto= dao.getOwnerRestaurant(restaurantId);
 			

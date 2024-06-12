@@ -13,6 +13,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : LoginServlet.java
+PROGRAM NAME    : 로그인
+DESCRIPTION    : 로그인 관련 servlet
+AUTHOR        : 김문정
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   김문정        init
+
+*/
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -23,6 +37,7 @@ public class LoginServlet extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		
+		// jsp에서 보낸 request 읽기
 		String id=request.getParameter("user_id");
 		String pwd=request.getParameter("user_pwd");
 		
@@ -31,7 +46,8 @@ public class LoginServlet extends HttpServlet {
 		
 		// user_role이 "1"이면 사용자 / "2"이면 사장님
 		if(role.equals("1")) {
-			// request에 userId 저장
+			
+			// request에 userId 넣어 UserMain 서블릿으로 포워딩
 			request.setAttribute("userId", id);
 			request.getRequestDispatcher("userMain").forward(request, response);
 			
@@ -42,15 +58,19 @@ public class LoginServlet extends HttpServlet {
 			if(dao.getRegister(id)) {
 				String restaurantId = dao.getRid(id);
 				
+				// 가게가 등록되어 있다면 restaurant_id까지 request에 넣어 OwnerMain 서블릿으로 포워딩
 				request.setAttribute("restaurantId", restaurantId);
 				request.getRequestDispatcher("ownerMain").forward(request, response);
 				
 			}else {
+				// 가게 미등록 시 등록 페이지로 이동
 				request.getRequestDispatcher("register.jsp").forward(request, response);
 			}
 			
+		// role이 null일 시 처리 코드 작성	
 		} else {
 			System.out.println("일치하는 로그인 정보가 없습니다.");
+			// alert 보여준 후 회원가입 페이지로 이동하는 코드 작성
 		}
 	}
 

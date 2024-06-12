@@ -24,16 +24,13 @@
     <div>
     </div>
     <div class="search-section">
-        <div class="search-conditions">
-            <label for="search">검색 조건</label>
-            <select id="search-conditions">
-                <option value="restaurant">식당 이름</option>
-                <option value="location">지역</option>
-            </select>
-        </div>
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="검색...">
-            <button id="search-button" onclick="search()">🔍</button>
+        <div class="search-div">
+            <form method="post" action="search" class="search-form">
+            	<label for="name">검색할 이름:</label>
+            	<input type="text" id="keywords" name="keywords" placeholder="식당 이름을 입력하세요" required>
+            	<input type="hidden" name="userId" value="${userId }">
+            	<input type="submit" value="검색" class="search-button">
+        	</form>
         </div>
     </div>
     <div class="map-section">

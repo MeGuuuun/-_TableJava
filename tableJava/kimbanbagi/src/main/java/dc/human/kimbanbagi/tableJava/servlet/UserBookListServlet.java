@@ -15,37 +15,56 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : UserBookListServlet.java
+PROGRAM NAME    : 사용자 예약 내역 리스트
+DESCRIPTION    : 사용자의 예약 내역을 보여주고 관리 함
+AUTHOR        : 박지민
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   박지민        init
+
+*/
+
 @WebServlet("/UserBookList")
 public class UserBookListServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		response.setCharacterEncoding("UTF-8");
 		request.setCharacterEncoding("utf-8");
 		
+		// 사용자가 누르는 버튼의 종류에 따라 다른 처리를 해야 함
 		String action = request.getParameter("action");
 		
 		BookDAO dao = new BookDAO();
 		
+		String userId = request.getParameter("userId");
+		
+		// 사용자의 예약 내역을 보여줌
 		if(action.equals("bookList")) {
-			String userId = request.getParameter("userId");
-			
 			List<BookDTO> bookList = dao.getUserBookList(userId);
 			
 			request.setAttribute("userId", userId);
 			request.setAttribute("bookList", bookList);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/userBookList.jsp");
-			dispatcher.forward(request, response);
-			
+			request.getRequestDispatcher("/userBookList.jsp").forward(request, response);
+		
+		// 사용자의 예약 내역 중 하나의 예약 상태를 변경 함 
 		} else if(action.equals("status")) {
-			String userId = request.getParameter("userId");
 			String restaurantId = request.getParameter("restaurantId");
 			
 			String status = request.getParameter("status");
 			
-			dao.changeStatus(status, userId, restaurantId);
-			
-			response.sendRedirect("/userBookList.jsp");
+			if(dao.changeStatus(status, userId, restaurantId) != 0 ) {
+				response.sendRedirect("/userBookList.jsp");
+			} else {
+				// 예약 상태 변경 관련 sql문 오류 시 처리 코드 작성
+			}
 			
 		} 
 	}

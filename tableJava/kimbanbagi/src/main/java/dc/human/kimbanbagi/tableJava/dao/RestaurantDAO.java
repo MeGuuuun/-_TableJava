@@ -12,19 +12,47 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : RestaurantDAO.java
+PROGRAM NAME    : 레스토랑(식당)
+DESCRIPTION    : 레스토랑 관련 sql문 처리
+AUTHOR        : 박지민
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   박지민        init
+
+*/
+
 public class RestaurantDAO {
 	private Connection conn;
-	
-	public boolean addRestaurant(RestaurantDTO restaurant) {
-			    java.util.Date now = new java.util.Date();
-		        Date sqlDate = new Date(now.getTime());
-		        
-		        boolean result = false;
+	int row=0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
 
+	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	java.util.Date now = new java.util.Date();
+	Date sqlDate = new Date(now.getTime()); 
+	
+	public int addRestaurant(RestaurantDTO restaurant) {
 		        try {
 		        	conn = DBConnectionManager.getConnection();
 		        	
-		        	String sql = "INSERT into restaurants VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		        	String sql = "INSERT into restaurants "
+		        			+ "				restaurant_id,"
+		        			+ "				restaurant_name,"
+		        			+ "				restaurant_head,"
+		        			+ "				restaurant_city,"
+		        			+ "				restaurant_address,"
+		        			+ "				restaurant_number,"
+		        			+ "				restaurant_photo,"
+		        			+ "				user_id,"
+		        			+ "				reservation_available,"
+		        			+ "				waiting_available,"
+		        			+ "				created_date,"
+		        			+ "				created_id"
+		        			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 		        		
 		        	PreparedStatement pstmt = conn.prepareStatement(sql);
 		             
@@ -40,14 +68,8 @@ public class RestaurantDAO {
 		             pstmt.setString(10, restaurant.getW_status());
 		             pstmt.setDate(11, sqlDate);
 		             pstmt.setString(12, restaurant.getU_id());
-		             pstmt.setDate(13, sqlDate);
-		             pstmt.setString(14, restaurant.getU_id());
 		            
-		             pstmt.executeUpdate();
-		             
-		             changeRStatus(restaurant.getU_id());
-		             
-		             result=true;
+		             row = pstmt.executeUpdate();
 		             
 		             conn.close();
 		 			 pstmt.close();
@@ -56,21 +78,27 @@ public class RestaurantDAO {
 		            	 e.printStackTrace();
 		        }
 		        
-		        return result;
+		        return row;
 		    }
 	
 	// 식당 등록을 완료한 뒤에 user 테이블의 store_register 값을 바꿔주는 메소드
-	public void changeRStatus(String id) {
+	public int changeRStatus(String id) {
 		try {
 			conn=DBConnectionManager.getConnection();
 			
-			String sql = "UPDATE users SET store_register=? WHERE user_id=?";
+			String sql = "UPDATE users SET "
+					+ "				store_register=?,"
+					+ "				updated_date=?,"
+					+ "				updated_id=? "
+					+ "WHERE user_id=?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, "1");
-			pstmt.setString(2, id);
+			pstmt.setString(1, "1"); // 가게 등록 시 "1"
+			pstmt.setDate(2, sqlDate);
+			pstmt.setString(3, id);
+			pstmt.setString(4, id);
 			
-			pstmt.executeUpdate();
+			row = pstmt.executeUpdate();
 			
 			conn.close();
 			pstmt.close();
@@ -78,25 +106,36 @@ public class RestaurantDAO {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		return row;
 	}
 	
 	
 	// 식당 상세 페이지
-	//식당 상세 정보를 모두 가져오는 메소드
-	public RestaurantDTO getRestaurantDetail(String id, String name) {
+	// 사용자가 식당 관련 div를 클릭 했을 시 해당 식당 정보를 모두 가져오는 메소드
+	public RestaurantDTO getRestaurantDetail(String id) {
 		RestaurantDTO dto = new RestaurantDTO();
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT * FROM restaurants WHERE restaurant_id='" + id + "'";
+			String sql = "SELECT "
+					+ "				restaurant_name,"
+					+ "				restaurant_city,"
+					+ "				restaurant_address,"
+					+ "				restaurant_number,"
+					+ "				reservation_available,"
+					+ "				waiting_available "
+					+ "FROM restaurants "
+					+ "WHERE restaurant_id=?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				dto.setR_name(rs.getString("restaurant_name"));
-				dto.setR_head(rs.getString("restaurant_head"));
 				dto.setR_city(rs.getString("restaurant_city"));
 				dto.setR_address(rs.getString("restaurant_address"));
 				dto.setR_number(rs.getString("restaurant_number"));
@@ -117,22 +156,31 @@ public class RestaurantDAO {
 	
 	// 마이 페이지 > 사용한 식당 내역
 	//사용자가 이용 완료한 식당 리스트 가져오는 메소드
+	// reservation_status가 "4"(이용 완료)인 레코드 가져오기
 	public BookDTO restaurantHistory(String id) {
 		BookDTO dto = new BookDTO();
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT * FROM reservation WHERE user_id='" + id + "'";
+			String sql = "SELECT "
+					+ "				restaurant_name,"
+					+ "				reservation_date,"
+					+ "				reservation_time "
+					+ "FROM reservation "
+					+ "WHERE user_id=? "
+					+ "AND reservation_status=?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, "4");
+			
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				dto.setRestaurant_name(rs.getString("restaurant_name"));
-				dto.setA_count(rs.getString("adult_count"));
-				dto.setK_count(rs.getString("kids_count"));
-				dto.setStatus(rs.getString("reservation_status"));
+				dto.setDate("reservation_date");
+				dto.setTime("reservation_time");
 			}
 			
 			conn.close();
@@ -147,16 +195,27 @@ public class RestaurantDAO {
 	}
 	
 	// 사장님 메인 화면
-	//사장님 메인 화면에 본인이 등록한 가게 정보 뜨게 하는 메소드
+	// 사장님 메인 화면에 본인이 등록한 가게 정보 뜨게 하는 메소드
 	public RestaurantDTO getOwnerRestaurant(String id) {
 		RestaurantDTO dto = new RestaurantDTO();
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			String sql = "SELECT * FROM restaurants WHERE restaurant_id='" + id + "'";
+			String sql = "SELECT "
+					+ "				restaurant_id,"
+					+ "				restaurant_name,"
+					+ "				restaurant_head,"
+					+ "				restaurant_city,"
+					+ "				restaurant_address,"
+					+ "				restaurant_number,"
+					+ "				reservation_available,"
+					+ "				waiting_available "
+					+ "FROM restaurants "
+					+ "WHERE restaurant_id=?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -168,8 +227,12 @@ public class RestaurantDAO {
 				dto.setR_number(rs.getString("restaurant_number"));
 				dto.setR_status(rs.getString("reservation_available"));
 				dto.setW_status(rs.getString("waiting_available"));
-				
 			}
+			
+			conn.close();
+			pstmt.close();
+			rs.close();
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -181,5 +244,43 @@ public class RestaurantDAO {
 	//사용자 위치 기반 주위 식당 정보를 뜨게 하는 메소드
 	public void restaurantAround() {
 		
+	}
+	
+	public List<RestaurantDTO> searchRestaurant(String keywords) {
+		List<RestaurantDTO> dtoList = new ArrayList<>();
+		
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "SELECT "
+					+ "restaurant_id,"
+					+ "restaurant_name,"
+					+ "restaurant_city "
+					+ "FROM restaurants "
+					+ "WHERE restaurant_name "
+					+ "LIKE '%' || ? || '%'";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, keywords);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				RestaurantDTO dto = new RestaurantDTO();
+				
+				dto.setR_id(rs.getString("restaurant_id"));
+				dto.setR_city(rs.getString("restaurant_city"));
+				dto.setR_name(rs.getString("restaurant_name"));
+				
+				dtoList.add(dto);
+			}
+			
+			conn.close();
+			pstmt.close();
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dtoList;
 	}
 }

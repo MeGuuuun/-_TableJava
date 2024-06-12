@@ -1,0 +1,36 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : LoginServlet.java
+PROGRAM NAME    : 로그인
+DESCRIPTION    : 로그인 관련 servlet
+AUTHOR        : 김문정
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   김문정        init
+
+*/
+
+@WebServlet("/MyPage")
+public class MyPageServlet extends HttpServlet {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("utf-8");
+        
+        
+    }
+
+}

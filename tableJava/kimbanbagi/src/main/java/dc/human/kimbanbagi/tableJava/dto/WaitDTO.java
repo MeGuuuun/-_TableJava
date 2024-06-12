@@ -5,13 +5,9 @@ public class WaitDTO {
 	private String phoneNumber;
 	private String restaurantId;
 	private String restaurantName;
-	private int headCount;
-	private int waitingNumber;
+	private String headCount;
+	private String  waitingNumber;
 	private String waitingStatus;
-	private String createdDate;
-	private String createdId;
-	private String updatedDate;
-	private String updatedId;
 	
 	// Gettes and Setters
 	public void setUserId(String userId) {
@@ -46,19 +42,19 @@ public class WaitDTO {
 		return restaurantName;
 	}
 	
-	public void setHeadCount(int headCount) {
+	public void setHeadCount(String headCount) {
 		this.headCount = headCount;
 	}
 	
-	public int getHeadCount() {
+	public String getHeadCount() {
 		return headCount;
 	}
 	
-    public void setWaitingNumber(int waitingNumber) {
+    public void setWaitingNumber(String waitingNumber) {
         this.waitingNumber = waitingNumber;
     }
     
-	public int getWaitingNumber() {
+	public String getWaitingNumber() {
         return waitingNumber;
     }
 
@@ -69,38 +65,5 @@ public class WaitDTO {
     public String getWaitingStatus() {
         return waitingStatus;
     }
-    
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-    
-    public String getCreatedDate() {
-        return createdDate;
-    }
-    
-    public void setCreatedId(String createdId) {
-        this.createdId = createdId;
-    }
-    
-    public String getCreatedId() {
-        return createdId;
-    }
-    
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-   
-    public void setUpdatedId(String updatedId) {
-        this.updatedId = updatedId;
-    }
-    
-    public String getUpdatedId() {
-        return updatedId;
-    }
-	
-	
+
 }
