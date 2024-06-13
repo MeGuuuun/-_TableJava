@@ -1,0 +1,14 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import dc.human.kimbanbagi.tableJava.common.DBConnectionManager;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+public class NotificationDAO {
+
+}

@@ -1,0 +1,27 @@
+package dc.human.kimbanbagi.tableJava.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/Notification")
+public class NotificationServlet extends HttpServlet {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		request.setCharacterEncoding("UTF_8");
+		response.setCharacterEncoding("UTF-8");
+		
+		String action = request.getParameter("action");
+		
+		if(action.equals("userNotification")) {
+			
+		}else if(action.equals("ownerNotification")) {
+			
+		}
+	}
+
+}

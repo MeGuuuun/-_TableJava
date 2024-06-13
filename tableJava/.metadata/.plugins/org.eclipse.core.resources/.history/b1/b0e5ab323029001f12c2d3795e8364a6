@@ -1,0 +1,130 @@
+package dc.human.kimbanbagi.tableJava.dao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import dc.human.kimbanbagi.tableJava.common.DBConnectionManager;
+import dc.human.kimbanbagi.tableJava.dto.*;
+
+/*
+
+PROJECT        : tablejava
+PROGRAM ID    : NotificationDAO.java
+PROGRAM NAME    : 알림 dao
+DESCRIPTION    : 알림 페이지 관련 sql문 처리
+AUTHOR        : 박지민
+CREATED DATE    : 2024.06.05.
+HISTORY
+======================================================
+DATE     NAME           DESCRIPTION
+2024.06.05   박지민        init
+
+*/
+
+public class NotificationDAO {
+	private Connection conn;
+	int row=0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
+
+	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	java.util.Date now = new java.util.Date();
+	Date sqlDate = new Date(now.getTime());
+	
+	// 알림 내역을 가져오는 메소드
+	public List<NotificationDTO> getNotificationList (String userId) {
+		List<NotificationDTO> dtoList = new ArrayList<>();
+		
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "SELECT "
+					+ "				user_id,"
+					+ "				restaurant_id,"
+					+ "				restaurant_name,"
+					+ "				reservation_status,"
+					+ "				reservation_date,"
+					+ "				reservation_time,"
+					+ "				adult_count,"
+					+ "				kids_count,"
+					+ "				waiting_number,"
+					+ "				head_count,"
+					+ "				comments "
+					+ "FROM notification "
+					+ "WHERE user_id=?";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				NotificationDTO dto = new NotificationDTO();
+				
+				dto.setuId(rs.getString("user_id"));
+				dto.setrId(rs.getString("restaurant_id"));
+				dto.setrName(rs.getString("restaurant_name"));
+				dto.setrStatus(rs.getString("reservation_status"));
+				dto.setrDate(rs.getString("reservation_date"));
+				dto.setrTime(rs.getString("reservation_time"));
+				dto.setaCount(rs.getString("adult_count"));
+				dto.setkCount(rs.getString("kids_count"));
+				dto.setwNumber(rs.getString("waiting_number"));
+				dto.sethCount(rs.getString("head_count"));
+				dto.setComments(rs.getString("comments"));
+				
+				dtoList.add(dto);
+			}
+			
+			conn.close();
+			pstmt.close();
+			rs.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dtoList;
+	}
+	
+	public int addBookNotification (NotificationDTO dto) {
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "INSERT INTO notification "
+					+ "				user_id,"
+					+ "				restaurant_id,"
+					+ "				restaurant_name,"
+					+ "				reservation_status,"
+					+ "				reservation_date,"
+					+ "				reservation_time,"
+					+ "				adult_count,"
+					+ "				kids_count,"
+					+ "				comments,"
+					+ "				created_date,"
+					+ "				created_id "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getuId());
+			pstmt.setString(2, dto.getrId());
+			pstmt.setString(3, dto.getrName());
+			pstmt.setString(4, dto.getrStatus());
+			pstmt.setString(5, dto.getrDate());
+			pstmt.setString(6, dto.getrTime());
+			pstmt.setString(7, dto.getaCount());
+			pstmt.setString(8, dto.getkCount());
+			pstmt.setString(9, dto.getComments());
+			pstmt.setDate(10, sqlDate);
+			pstmt.setString(11, dto.getuId());
+			
+			row = pstmt.executeUpdate();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return row;
+	}
+}
