@@ -1,0 +1,40 @@
+package dc.human.kimbanbagi.tableJava.dto;
+
+public class TempoPWDTO {
+	String id;
+	String name;
+	String oldPwd;
+	String newPwd;
+	
+	public String getId() {
+		return this.id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getOldPwd() {
+		return oldPwd;
+	}
+
+	public void setOldPwd(String oldPwd) {
+		this.oldPwd = oldPwd;
+	}
+
+	public String getNewPwd() {
+		return newPwd;
+	}
+
+	public void setNewPwd(String newPwd) {
+		this.newPwd = newPwd;
+	}
+}

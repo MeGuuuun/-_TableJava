@@ -1,6 +1,7 @@
 package dc.human.kimbanbagi.tableJava.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -26,6 +27,11 @@ DATE     NAME           DESCRIPTION
 
 public class MyPageDAO {
 	private Connection conn;
+	int row=0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
+
+	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	java.util.Date now = new java.util.Date();
+	Date sqlDate = new Date(now.getTime()); 
 	
 	public UserDTO getUserInfo(String id) {
 		UserDTO dto = new UserDTO();
@@ -109,5 +115,59 @@ public class MyPageDAO {
 		}
 		
 		return dtoList;
+	}
+	
+	public int updatePwd(String userId, String newPwd) {
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "UPDATE users SET "
+					+ "user_pwd=?,"
+					+ "updated_date=?,"
+					+ "updated_id=? "
+					+ "WHERE user_id=?";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, newPwd);
+			pstmt.setDate(2, sqlDate);
+			pstmt.setString(3, userId);
+			pstmt.setString(4, userId);
+			
+			row = pstmt.executeUpdate();
+			
+			conn.close();
+			pstmt.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return row;
+	}
+	
+	public int withdrawal (String userId) {
+		try {
+			conn = DBConnectionManager.getConnection();
+			
+			String sql = "UPDATE users SET "
+					+ "withdrawal_status=?,"
+					+ "created_date=?,"
+					+ "created_id=? "
+					+ "WHERE user_id=?";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "0");
+			pstmt.setDate(2, sqlDate);
+			pstmt.setString(3, userId);
+			pstmt.setString(4, userId);
+			
+			row = pstmt.executeUpdate();
+			
+			conn.close();
+			pstmt.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return row;
 	}
 }

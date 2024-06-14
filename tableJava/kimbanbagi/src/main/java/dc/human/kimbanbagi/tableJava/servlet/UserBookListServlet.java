@@ -62,9 +62,11 @@ public class UserBookListServlet extends HttpServlet {
 		
 			String status = request.getParameter("status");
 			
+			// 예약 상태 변경 sql문 처리
 			if(dao.changeStatus(status, userId, restaurantId) != 0 ) {
 				NotificationDAO ndao = new NotificationDAO();
 				
+				// 예약 취소일 경우 알림
 				if(ndao.bookCancelFromUser(userId, restaurantId, restaurantName)!=0) {
 					
 					request.setAttribute("userId", userId);

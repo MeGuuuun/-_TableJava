@@ -62,9 +62,11 @@ public class OwnerBookListServlet extends HttpServlet {
 			
 			String status = request.getParameter("status");
 			
+			// 예약 상태 변경 sql문 처리 확인
 			if(dao.changeStatus(status, userId, restaurantId) != 0) {
 				NotificationDAO ndao = new NotificationDAO();
 				
+				// 예약 확정일 경우 알림
 				if(status.equals("1")) {
 					
 					if(ndao.confirmBook(userId, restaurantName)!=0) {
@@ -76,9 +78,22 @@ public class OwnerBookListServlet extends HttpServlet {
 					} else {
 						// notification 쿼리문 오류 처리 코드 작성
 					}
-					
-				}else if(status.equals("2")) {
+				
+				// 예약 거절일 경우 알림
+				}else if(status.equals("3")) {
 					if(ndao.bookCancelFromOwner(userId,restaurantId, restaurantName)!=0) {
+						
+						request.setAttribute("userId", userId);
+						request.setAttribute("restaurantId", restaurantId);
+						request.getRequestDispatcher("/ownerBookList.jsp").forward(request, response);
+						
+					}else {
+						// notification 쿼리문 오류 처리 코드 작성
+					}
+				
+				// 예약 종료일 경우 알림
+				}else if(status.equals("4")) {
+					if(ndao.endBook(userId, restaurantId, restaurantName)!=0) {
 						
 						request.setAttribute("userId", userId);
 						request.setAttribute("restaurantId", restaurantId);

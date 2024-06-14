@@ -33,14 +33,10 @@ h1 {
     color: #FF1616;
 }
 
-.imgDiv {
-	height:150px;
-	width:400px;
-}
 
 .container img {
-	width: 100%;
-	heigth: 100vh;
+	width: 150px;
+	heigth: 150px;
 	margin-bottom: 20px;
 }
 

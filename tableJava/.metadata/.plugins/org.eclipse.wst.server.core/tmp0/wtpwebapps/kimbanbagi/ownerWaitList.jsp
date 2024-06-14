@@ -36,7 +36,11 @@ function cancelStatus(rId, uId) {
             	<button type="submit">메인 화면</button>
             </form>
             <button onclick="location.reload()">예약/웨이팅</button>
-            <button onclick="location.href='notification.jsp'">알림 화면</button>
+            <form method="post" action="Notification">
+            	<input type="hidden" name="userId" value="${userId }">
+            	<input type="hidden" name="restaurantId" value="${restaurantId }">
+            	<button type="submit" name="action" value="ownerNotification">알림 화면</button>
+            </form>
             <form method="POST" action="MyPage">
             	<input type="hidden" name="userId" value="${userId }">
             	<input type="hidden" name="restaurantId" value="${restaurantId }">

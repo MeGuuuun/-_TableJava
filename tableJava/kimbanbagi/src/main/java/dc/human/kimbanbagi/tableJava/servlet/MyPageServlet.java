@@ -41,7 +41,7 @@ public class MyPageServlet extends HttpServlet {
         
         MyPageDAO dao = new MyPageDAO();
         
-        // users 테이블에서 회원 정보 끌어오는 메소드 만들어서 myPage.jsp로 보내는 코드 작성
+        // users 테이블에서 회원 정보 끌어오는 메소드 만들어서 마이 페이지로 보내는 코드 작성
         // 사장님 정보 가져오는 메소드
         if(action.equals("getOwnerInfo")) {
         	String restaurantId = request.getParameter("restaurantId");
@@ -56,12 +56,33 @@ public class MyPageServlet extends HttpServlet {
         	// 사용자 정보 가져오는 메소드	
         }else if(action.equals("getUserInfo")) {
         	UserDTO dto = dao.getUserInfo(userId);
-        	List<BookDTO> dto_ = dao.restaurantHistory(userId);
+        	List<BookDTO> dtoList = dao.restaurantHistory(userId);
         	
         	request.setAttribute("user", dto);
-        	request.setAttribute("history", dto_);
+        	request.setAttribute("history", dtoList);
         	request.setAttribute("userId", userId);
         	request.getRequestDispatcher("userMyPage.jsp").forward(request, response);
+        	
+        	// 비밀번호 변경 메소드
+        }else if(action.equals("changePW")) {
+        	String newPwd = request.getParameter("newPwd");
+        	
+        	// 비밀번호 변경 성공 시 request의 attribute를 모두 삭제하고 로그인 페이지로 이동
+        	if(dao.updatePwd(userId, newPwd)!=0) {
+        		request.removeAttribute("userId");
+        		request.removeAttribute("restaurantId");
+        	}else {
+        		// 비밀번호 업데이트 sql 처리 오류
+        	}
+        	
+        	// 회원 탈퇴
+        }else if(action.equals("withdrawal")) {
+        	
+        	// 회원 탈퇴 성공 시 request의 attribute를 모두 삭제하고 로그인 페이지로 이동
+        	if(dao.withdrawal(userId)!=0) {
+        		request.removeAttribute("userId");
+        		request.removeAttribute("restaurantId");
+        	}
         }
         
     }

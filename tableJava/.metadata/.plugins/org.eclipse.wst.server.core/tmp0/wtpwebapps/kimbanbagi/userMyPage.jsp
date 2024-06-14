@@ -11,6 +11,28 @@
 		alert("로그아웃 되었습니다.");
 		window.location.href="login.jsp";
 	}
+	
+	function withdrawal_confirm(uId) {
+		var userId = uId;
+		
+		if(confirm("정말 탈퇴하시겠어요?")){
+			$.ajax({
+				type : "POST",
+				url : "MyPage",
+				data : {
+					action : "withdrawal",
+					userId : userId
+				},
+				success : function(response) {
+					alert("회원 탈퇴가 완료 되었습니다.");
+					window.location.href="login.jsp"
+				},
+				error : function() {
+					alert("회원 탈퇴에 실패했습니다.");
+				}
+			})
+		}
+	}
 </script>
 </head>
 <body>
@@ -40,7 +62,15 @@
                 <h2>ID : ${user.uId}</h2>
                 <p>이름 : ${user.name}</p>
             </div>
-            <!-- 개인 정보 수정 버튼 / 클릭 시 팝업창 뜨고 비밀번호 일치하면 정보 수정 페이지로 이동 -->
+            <div>
+            	<form method="post" action="updatePW.jsp">
+            		<input type="hidden" name="userId" value="${userId }">
+            		<button type="submit">비밀번호 변경</button>
+            	</form>
+            </div>
+            <div>
+            	<button onclick="confirm_withdrawal('${userId}')">회원 탈퇴</button>
+            </div>
         </section>
         <div>
         	<h1>내가 이용한 식당 리스트</h1>

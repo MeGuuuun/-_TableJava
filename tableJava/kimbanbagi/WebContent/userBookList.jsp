@@ -14,12 +14,16 @@ function cancelStatus(rId, uId, rName) {
     var userId = uId;
     var restaurantName = rName;
     
+    var button = document.getElementById("cancelBtn");
+    
     $.ajax({
         type: "POST",
         url: "UserBookList",
         data: { action: "status", status : status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
         success: function(response) {
             alert("예약 취소 되었습니다.");
+            button.value="취소 완료";
+            button.disabled=true;
             window.location.reload();
         },
         error: function() {
@@ -70,7 +74,7 @@ function cancelStatus(rId, uId, rName) {
 					예약 상태 : ${book.status }
 				</div>
 				<div>
-					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${userId }', '${book.restaurant_name}')" id="statusBtn">예약 취소</button>
+					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${userId }', '${book.restaurant_name}')" id="cancelBtn">예약 취소</button>
 				</div>
 			</div>
 		</c:forEach>

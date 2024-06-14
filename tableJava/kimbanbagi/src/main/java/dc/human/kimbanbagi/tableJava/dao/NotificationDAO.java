@@ -63,7 +63,7 @@ public class NotificationDAO {
 	Comments cmts;
 	
 	// 사용자의 알림 내역을 가져오는 메소드
-	public List<NotificationDTO> getUserNotificationList (String userId) {
+	public List<NotificationDTO> getUserNotificationList (String uId) {
 		List<NotificationDTO> dtoList = new ArrayList<>();
 		
 		try {
@@ -77,7 +77,7 @@ public class NotificationDAO {
 					+ "WHERE user_id=?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, userId);
+			pstmt.setString(1, uId);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -100,6 +100,45 @@ public class NotificationDAO {
 		
 		return dtoList;
 	}
+	
+	// 사장님의 알림 내역을 가져오는 메소드
+		public List<NotificationDTO> getOwnerNotificationList (String rId) {
+			List<NotificationDTO> dtoList = new ArrayList<>();
+			
+			try {
+				conn = DBConnectionManager.getConnection();
+				
+				String sql = "SELECT "
+						+ "restaurant_id,"
+						+ "restaurant_name,"
+						+ "comments "
+						+ "FROM notification "
+						+ "WHERE restaurant_id=?";
+				
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, rId);
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					NotificationDTO dto = new NotificationDTO();
+					
+					dto.setuId(rs.getString("restaurant_id"));
+					dto.setrName(rs.getString("restaurant_name"));
+					dto.setComments(rs.getString("comments"));
+					
+					dtoList.add(dto);
+				}
+				
+				conn.close();
+				pstmt.close();
+				rs.close();
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return dtoList;
+		}
 	
 	// 사용자의 예약 신청을 처리하는 메소드
 	// 사용자에게는 예약 신청이 완료 되었다는 알림이 가고
@@ -302,7 +341,7 @@ public class NotificationDAO {
 		
 		// 예약 종료 메소드
 		// 사용자와 사장님 모두에게 예약 종료 알림이 감
-		public int endBook (BookDTO dto) {
+		public int endBook (String uId, String rId, String rName) {
 			try {
 				conn = DBConnectionManager.getConnection();
 				
@@ -317,12 +356,12 @@ public class NotificationDAO {
 				
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getUser_id());
-				pstmt.setString(2, dto.getRestaurant_id());
-				pstmt.setString(3, dto.getRestaurant_name());
+				pstmt.setString(1, uId);
+				pstmt.setString(2, rId);
+				pstmt.setString(3, rName);
 				pstmt.setString(4, Comments.BOOK_E.getValue());
 				pstmt.setDate(5, sqlDate);
-				pstmt.setString(6, dto.getUser_id());
+				pstmt.setString(6, uId);
 				
 				row = pstmt.executeUpdate();
 				

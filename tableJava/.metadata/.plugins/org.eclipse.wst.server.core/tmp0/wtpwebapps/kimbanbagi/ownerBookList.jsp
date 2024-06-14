@@ -8,11 +8,16 @@
 <title>ownerBookList</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+// 예약 확정 처리 ajax
 function confirmStatus(rId, uId, rName) {
 	var status = "1";
 	var restaurantId = rId;
 	var userId = uId;
 	var restaurantName = rName;
+	
+	var cbutton = document.getElementById("confirmBtn");
+	var ebutton = document.getElementById("endBtn");
 	
 	$.ajax({
         type: "POST",
@@ -20,6 +25,8 @@ function confirmStatus(rId, uId, rName) {
         data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
         success: function(response) {
             alert("예약 확정되었습니다.");
+            cbutton.style.display = "none";
+            ebutton.style.display = "block";
            	window.location.reload();
         },
         error: function() {
@@ -27,12 +34,38 @@ function confirmStatus(rId, uId, rName) {
         }
     });
 }
+
+// 예약 종료 처리 ajax
+function endStatus(rId, uId, rName){
+	var status = "4";
+	var restaurantId = rId;
+	var userId = uId;
+	var restaurantName = rName;
 	
+	var button = document.getElementById("endBtn");
+	
+	$.ajax({
+        type: "POST",
+        url: "OwnerBookList",
+        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
+        success: function(response) {
+            button.disabled = true;
+           	window.location.reload();
+        },
+        error: function() {
+            alert("예약 종료에 실패했습니다. 다시 시도해주세요.");
+        }
+    });
+}
+
+// 예약 취소 처리 ajax
 function cancelStatus(rId, uId, rName) {
-    var status = "2";
+    var status = "3";
     var restaurantId = rId;
     var userId = uId;
     var restaurantName = rName;
+    
+    var button = document.getElementById("cancelBtn");
    
     $.ajax({
         type: "POST",
@@ -40,6 +73,8 @@ function cancelStatus(rId, uId, rName) {
         data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
         success: function(response) {
             alert("예약 취소되었습니다.");
+            button.value="취소 완료";
+            button.disabled=true;
             window.location.reload();
         },
         error: function() {
@@ -58,7 +93,11 @@ function cancelStatus(rId, uId, rName) {
             	<button type="submit">메인 화면</button>
             </form>
             <button onclick="location.reload()">예약/웨이팅</button>
-            <button onclick="location.href='notification.jsp'">알림 화면</button>
+            <form method="post" action="Notification">
+            	<input type="hidden" name="userId" value="${userId }">
+            	<input type="hidden" name="restaurantId" value="${restaurantId }">
+            	<button type="submit" name="action" value="ownerNotification">알림 화면</button>
+            </form>
             <form method="POST" action="MyPage">
             	<input type="hidden" name="userId" value="${userId }">
             	<input type="hidden" name="restaurantId" value="${restaurantId }">
@@ -89,10 +128,13 @@ function cancelStatus(rId, uId, rName) {
 					예약 상태 : ${book.status }
 				</div>
 				<div>
-					<button type="button" onclick="confirmStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="confirmBtn">예약 확정</button>
+					<button type="button" onclick="confirmStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="confirmBtn" value="예약 확정"></button>
 				</div>
 				<div>
-					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="cancelBtn">예약 취소</button>
+					<button type="button" onclick="endStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName }')" id="endBtn" value="예약 종료" style="display:none;"></button>
+				</div>
+				<div>
+					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="cancelBtn" value="예약 취소"></button>
 				</div>
 			</div>
 		</c:forEach>

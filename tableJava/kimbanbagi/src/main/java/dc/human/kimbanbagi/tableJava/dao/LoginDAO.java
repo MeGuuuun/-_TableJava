@@ -32,25 +32,24 @@ public class LoginDAO {
 	java.util.Date now = new java.util.Date();
 	Date sqlDate = new Date(now.getTime()); 
 	
-	public String match(String uid, String pw) {
-		String id=uid;
-		String pwd=pw;
-		
+	public String match(String uid, String pwd) {
 		String result = null;
 		
 		try {
 			conn = DBConnectionManager.getConnection();
 			
-			// *임시 비밀번호 테이블까지 join하여 대조하는 query문으로 수정
+			// 임시 비밀번호 테이블까지 join하여 대조하는 query문
 			String sql = "SELECT "
 					+ "COUNT(*) AS cnt "
-					+ "FROM users "
-					+ "WHERE user_id=? "
-					+ "AND user_pwd=?"; 
+					+ "FROM users u, temporary_password t "
+					+ "WHERE u.user_id=t.user_id "
+					+ "AND u.user_id=? "
+					+ "AND (u.user_pwd=? OR t.temporary_pwd=?)"; 
 			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, id);
+			pstmt.setString(1, uid);
 			pstmt.setString(2, pwd);
+			pstmt.setString(3, pwd);
 			
 			ResultSet rs=pstmt.executeQuery();
 			
@@ -59,7 +58,7 @@ public class LoginDAO {
 				
 				// 로그인 정보 대조 성공
 				if(cnt==1) {
-					result = getRole(id); // 로그인한 사람이 사용자인지, 사장님인지 판별하는 메소드
+					result = getRole(uid); // 로그인한 사람이 사용자인지, 사장님인지 판별하는 메소드
 					
 				// 로그인 정보 대조 실패
 				}else {

@@ -6,60 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Restaurant Information</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-        }
-        .header, .nav, .main, .footer {
-            padding: 10px;
-        }
-        .header {
-            background: #6DB33F;
-            color: white;
-            text-align: center;
-        }
-        .nav {
-            background: #F7F7F7;
-            text-align: center;
-        }
-        .nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #333;
-        }
-        .main {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .main img {
-            max-width: 300px;
-        }
-        .info {
-            border: 1px solid #ccc;
-            padding: 20px;
-            background: #F9F9F9;
-            width: 60%;
-        }
-        .footer {
-            background: #6DB33F;
-            color: white;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .edit-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #6DB33F;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-    </style>
 </head>
 <body>
 
@@ -75,7 +21,11 @@
             	<input type="hidden" name="restaurantId" value="${restaurantId }">
             	<button type="submit" name="action" value="bookList">예약/웨이팅</button>
             </form>
-            <button onclick="location.href='notification.jsp'">알림 화면</button>
+            <form method="post" action="Notification">
+            	<input type="hidden" name="userId" value="${userId }">
+            	<input type="hidden" name="restaurantId" value="${restaurantId }">
+            	<button type="submit" name="action" value="ownerNotification">알림 화면</button>
+            </form>
             <form method="POST" action="MyPage">
             	<input type="hidden" name="userId" value="${userId }">
             	<input type="hidden" name="restaurantId" value="${restaurantId }">

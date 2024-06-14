@@ -36,6 +36,13 @@ public class NotificationServlet extends HttpServlet {
 		}else if(action.equals("ownerNotification")) {
 			String restaurantId = request.getParameter("restaurantId");
 			
+			List<NotificationDTO> dtoList = dao.getOwnerNotificationList(restaurantId);
+			
+			request.setAttribute("userId", userId);
+			request.setAttribute("restaurantId", restaurantId);
+			request.setAttribute("notification", dtoList);
+			request.getRequestDispatcher("ownerNotification.jsp").forward(request, response);
+			
 		}
 	}
 

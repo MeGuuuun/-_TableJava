@@ -26,10 +26,10 @@
             	<input type="hidden" name="restaurantId" value="${restaurantId }">
             	<button type="submit" name="action" value="bookList">예약 / 웨이팅</button>
             </form>
-            <form method="post" action="">
+            <form method="post" action="Notification">
             	<input type="hidden" name="userId" value="${userId }">
             	<input type="hidden" name="restaurantId" value="${restaurantId }">
-            	<button type="submit">알림</button>
+            	<button type="submit" name="action" value="ownerNotification">알림 화면</button>
             </form>
             <button onclick="location.reload()">마이 페이지</button>
     	</div>
