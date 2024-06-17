@@ -36,10 +36,8 @@ public class RegisterServlet extends HttpServlet {
     	response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		
-		// LoginServlet에서 보낸 request 읽기
-		String uId =(String) request.getAttribute("userId");
-		
 		// register.jsp에서 보낸 request 읽기
+		String userId = request.getParameter("userId");
 		String restaurantId = request.getParameter("restaurantId");
         String restaurantName = request.getParameter("restaurantName");
         String restaurantHead = request.getParameter("restaurantHead");
@@ -76,7 +74,7 @@ public class RegisterServlet extends HttpServlet {
         dto.setR_city(restaurantCity);
         dto.setR_address(restaurantAddress);
         dto.setR_number(restaurantNumber);
-        dto.setU_id(uId);
+        dto.setU_id(userId);
         dto.setR_status(reservationAvailable);
         dto.setW_status(waitingAvailable);
         dto.setR_photo(inputStream);
@@ -85,8 +83,8 @@ public class RegisterServlet extends HttpServlet {
         
         if(dao.addRestaurant(dto) != 0) {
         	// 가게 등록 완료 시 users 테이블의 가게 등록 여부 칼럼 변경
-        	if(dao.changeRStatus(uId)!=0) {
-        		request.setAttribute("userId", uId);
+        	if(dao.changeRStatus(userId)!=0) {
+        		request.setAttribute("userId", userId);
                 request.setAttribute("restaurantId", restaurantId);
                 
                 // 가게 등록 완료 시 사장님 메인 화면으로 이동

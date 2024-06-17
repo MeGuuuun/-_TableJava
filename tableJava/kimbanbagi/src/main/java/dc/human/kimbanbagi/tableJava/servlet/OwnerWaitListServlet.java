@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import dc.human.kimbanbagi.tableJava.dao.WaitDAO;
-import dc.human.kimbanbagi.tableJava.dto.WaitDTO;
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.*;
 
 /*
 
@@ -43,7 +43,7 @@ public class OwnerWaitListServlet extends HttpServlet {
 		
 		// 사장님의 웨이팅 리스트를 보여주는 선택지
 		if(action.equals("waitList")){
-			List<WaitDTO> waitList = dao.getWaitingList(userId);
+			List<WaitDTO> waitList = dao.getOwnerWaitingList(restaurantId);
 			
 			request.setAttribute("userId", userId);
 			request.setAttribute("restaurantId", restaurantId);
@@ -53,11 +53,22 @@ public class OwnerWaitListServlet extends HttpServlet {
 		// 웨이팅 상태 변경 처리 메소드
 		}else if (action.equals("status")) {
 			String status = request.getParameter("status");
+			String bookId = request.getParameter("bookId");
 			
-			if(dao.changeStatus(status, userId, restaurantId) != 0 ) {
-				request.setAttribute("userId", userId);
-				request.setAttribute("restaurantId", restaurantId);
-				request.getRequestDispatcher("/ownerWaitList.jsp").forward(request, response);
+			if(dao.changeStatus(status, bookId, restaurantId) != 0 ) {
+				NotificationDAO ndao = new NotificationDAO();
+				
+				String restaurantName = request.getParameter("restaurantName");
+				
+				if(ndao.waitCancelFromOwner(restaurantId, userId, restaurantName)!=0) {
+					
+					request.setAttribute("userId", userId);
+					request.setAttribute("restaurantId", restaurantId);
+					request.getRequestDispatcher("/ownerWaitList.jsp").forward(request, response);
+					
+				}else {
+					//notification 오류 처리
+				}
 			} else {
 				// 웨이팅 상태 변경 관련 sql문 오류 시 처리 코드 작성
 			}

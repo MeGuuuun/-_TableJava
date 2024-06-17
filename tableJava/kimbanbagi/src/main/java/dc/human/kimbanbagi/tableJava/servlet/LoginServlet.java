@@ -44,34 +44,37 @@ public class LoginServlet extends HttpServlet {
 		LoginDAO dao= new LoginDAO();
 		String role = dao.match(id, pwd);
 		
+		if(role == null || role == "") {
+			String msg = "일치하는 회원 정보가 없습니다.";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		}
 		// user_role이 "1"이면 사용자 / "2"이면 사장님
-		if(role.equals("1")) {
+		else if(role.equals("1")) {
 			
 			// request에 userId 넣어 UserMain 서블릿으로 포워딩
 			request.setAttribute("userId", id);
 			request.getRequestDispatcher("userMain").forward(request, response);
 			
 		} else if(role.equals("2")) {
-			request.setAttribute("userId", id);
 			
 			// 사장님의 가게 등록 여부 확인 후 결과에 맞는 페이지로 이동
 			if(dao.getRegister(id)) {
 				String restaurantId = dao.getRid(id);
 				
+				request.setAttribute("userId", id);
 				// 가게가 등록되어 있다면 restaurant_id까지 request에 넣어 OwnerMain 서블릿으로 포워딩
 				request.setAttribute("restaurantId", restaurantId);
 				request.getRequestDispatcher("ownerMain").forward(request, response);
 				
 			}else {
+				request.setAttribute("userId", id);
 				// 가게 미등록 시 등록 페이지로 이동
 				request.getRequestDispatcher("register.jsp").forward(request, response);
 			}
 			
 		// role이 null일 시 처리 코드 작성	
-		} else {
-			System.out.println("일치하는 로그인 정보가 없습니다.");
-			// alert 보여준 후 회원가입 페이지로 이동하는 코드 작성
-		}
+		} 
 	}
 
 }

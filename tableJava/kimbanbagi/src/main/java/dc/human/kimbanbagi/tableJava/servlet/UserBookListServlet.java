@@ -44,9 +44,10 @@ public class UserBookListServlet extends HttpServlet {
 		
 		BookDAO dao = new BookDAO();
 		
+		String userId = request.getParameter("userId");
+		
 		// 사용자의 예약 내역을 보여줌
 		if(action.equals("bookList")) {
-			String userId = request.getParameter("userId");
 			
 			List<BookDTO> bookList = dao.getUserBookList(userId);
 			
@@ -56,7 +57,6 @@ public class UserBookListServlet extends HttpServlet {
 		
 		// 사용자의 예약 내역 중 하나의 예약 상태를 변경 함 
 		} else if(action.equals("status")) {
-			String userId = request.getParameter("userId");
 			String restaurantId = request.getParameter("restaurantId");
 			String restaurantName = request.getParameter("restaurantName");
 		
@@ -77,7 +77,11 @@ public class UserBookListServlet extends HttpServlet {
 					// notification 쿼리문 오류 처리 코드 작성
 				}
 			} else {
-				// 예약 상태 변경 관련 sql문 오류 시 처리 코드 작성
+				String msg = "예약 취소에 실패했습니다. 다시 시도해주세요.";
+				request.setAttribute("msg", msg);
+				request.setAttribute("userId", userId);
+				request.setAttribute("restaurantId", restaurantId);
+				request.getRequestDispatcher("/userBookList.jsp").forward(request, response);
 			}
 			
 		} 

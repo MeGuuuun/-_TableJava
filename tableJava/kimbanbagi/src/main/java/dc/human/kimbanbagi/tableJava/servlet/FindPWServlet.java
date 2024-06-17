@@ -49,7 +49,9 @@ public class FindPWServlet extends HttpServlet {
 		if(check) {
 			 response.sendRedirect("findPW_done.jsp");
 		} else {
-			 System.out.println("일치하는 정보가 없습니다.");
+			 String msg = "일치하는 정보가 없습니다.";
+			 request.setAttribute("msg", msg);
+			 request.getRequestDispatcher("findPW.jsp").forward(request, response);
 		}
 	}
 

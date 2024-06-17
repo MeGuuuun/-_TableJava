@@ -42,7 +42,7 @@ public class UserWaitListServlet extends HttpServlet {
 		
 		// 사용자의 웨이팅 리스트를 보여주는 선택지
 		if(action.equals("waitList")){
-			List<WaitDTO> waitList = dao.getWaitingList(userId);
+			List<WaitDTO> waitList = dao.getUserWaitingList(userId);
 			
 			request.setAttribute("userId", userId);
 			request.setAttribute("waitList", waitList);
@@ -55,9 +55,22 @@ public class UserWaitListServlet extends HttpServlet {
 			String status = request.getParameter("status");
 			
 			if(dao.changeStatus(status, userId, restaurantId) != 0 ) {
-				//
+				NotificationDAO ndao = new NotificationDAO();
+				
+				String restaurantName = request.getParameter("restaurantName");
+				
+				if(ndao.waitCancelFromUser(userId, restaurantId, restaurantName)!=0) {
+					
+					request.setAttribute("userId", userId);
+					request.getRequestDispatcher("/userWaitList.jsp").forward(request, response);
+				}else {
+					// notification 처리 오류
+				}
 			} else {
-				// 웨이팅 상태 변경 관련 sql문 오류 시 처리 코드 작성
+				String msg = "웨이팅 취소에 오류가 발생했습니다. 다시 시도해주세요.";
+				request.setAttribute("userId", userId);
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("/userWaitList.jsp").forward(request, response);
 			}
 		}
 	}

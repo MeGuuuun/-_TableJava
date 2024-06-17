@@ -92,7 +92,12 @@ public class BookServlet extends HttpServlet {
 				}
 				
 			} else {
-				//예약 관련 sql문 처리 오류 발생 > alert 띄우기
+				String msg = "예약 신청에 오류가 생겼습니다. 다시 시도해주세요.";
+	        	request.setAttribute("msg", msg);
+	        	request.setAttribute("userId", userId);
+	        	request.setAttribute("restaurantId", restaurantId);
+	        	request.setAttribute("restaurantName", restaurantName);
+	        	request.getRequestDispatcher("restaurantDetail").forward(request, response);
 			}
 		}
 	}

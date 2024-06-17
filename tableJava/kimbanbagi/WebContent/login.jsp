@@ -8,6 +8,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="css/login.css">
 <script>
+var msg = "${msg}";
+
+if(msg != null && msg != ""){
+	alert(msg);
+	request.removeAttribute("msg");
+}
+
 	function login(id, pwd) {
 		var userId = id;
 		var userPwd = pwd;
@@ -38,7 +45,7 @@
 					required>
 			</div>
 			<div class="input-group">
-				<label for="user_pwd">비밀번호</label> <input type="text"
+				<label for="user_pwd">비밀번호</label> <input type="password"
 					name="user_pwd" required>
 			</div>
 			<button type="submit" value="로그인" class="login-btn">

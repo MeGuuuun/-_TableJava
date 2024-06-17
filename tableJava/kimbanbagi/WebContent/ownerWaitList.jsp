@@ -8,21 +8,45 @@
 <title>ownerWaitList</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-function cancelStatus(rId, uId) {
+
+// 웨이팅 취소 메소드
+function cancelStatus(rId, bId, uId) {
     var status = "2";
     var restaurantId = rId;
+    var bookId = bId;
     var userId = uId;
     
     $.ajax({
         type: "POST",
-        url: "UserWaitList",
-        data: { action: "status", status : status, userId : userId, restaurantId : restaurantId },
+        url: "OwnerWaitList",
+        data: { action: "status", status : status, userId : userId, restaurantId : restaurantId, bookId : bookId },
         success: function(response) {
             alert("웨이팅 취소되었습니다.");
             window.location.reload();
         },
         error: function() {
             alert("웨이팅 취소에 실패했습니다. 다시 시도해주세요.");
+        }
+    });
+}
+
+// 웨이팅 호출 메소드
+function confirmStatus(rId, bId, uId) {
+    var status = "1";
+    var restaurantId = rId;
+    var bookId = bId;
+    var userId = uId;
+    
+    $.ajax({
+        type: "POST",
+        url: "OwnerWaitList",
+        data: { action: "status", status : status, userId : userId, restaurantId : restaurantId, bookId : bookId },
+        success: function(response) {
+            alert("고객님을 호출했습니다.");
+            window.location.reload();
+        },
+        error: function() {
+            alert("고객님 호출에 실패했습니다. 다시 시도해주세요.");
         }
     });
 }
@@ -58,14 +82,25 @@ function cancelStatus(rId, uId) {
 		<c:forEach items="${waitList}" var="wait">
 			<div>
 				<li>
-					웨이팅한 식당 : ${wait.restaurantName} <br>
+					웨이팅한 사용자의 아이디 : ${wait.userId} <br>
 					인원수 : ${wait.headCount } <br>	
-					웨이팅 상태 : ${wait.waitingStatus } <br>
 					웨이팅숫자 : ${wait.waitingNumber} <br>
+					웨이팅 상태 : ${wait.waitingStatus } <br>
 				</li>
 			</div>
 			<div>
-					<button type="button" onclick="cancelStatus('${wait.restaurantId}', '${userId }')" id="statusBtn">웨이팅 취소</button>
+				<c:if test="${wait.waitingStatus == '웨이팅 중' }">
+					<button type="button" onclick="cancelStatus('${restaurantId}', '${wait.userId }', '${userId }', '${wait.restaurantName }')" id="statusBtn">웨이팅 취소</button>
+					<button type="button" onclick="confirmStatus('${restaurantId}', '${wait.userId }', '${userId }', '${wait.restaurantName }')" id="statusBtn">고객 호출</button>
+				</c:if>
+				<c:if test="${wait.waitingStatus == '고객 호출' }">
+					<button type="button" disabled>고객 호출</button>
+					<button type="button">착석 완료</button>
+				</c:if>
+				<c:if test="${wait.waitingStatus == '웨이팅 취소' || wait.waitingStatus == '웨이팅 거절' || wait.waitingStatus == '착석 완료' }">
+					<button type="button" disabled>웨이팅 취소</button>
+					<button type="button" disabled>고객 호출</button>
+				</c:if>
 			</div>
 		</c:forEach>
 	</ul>

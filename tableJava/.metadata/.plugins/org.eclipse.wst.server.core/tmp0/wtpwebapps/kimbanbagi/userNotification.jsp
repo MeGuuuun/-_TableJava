@@ -16,7 +16,7 @@
             </form>
             <form method="post" action="UserBookList">
             	<input type="hidden" name="userId" value="${userId }">
-            	<button type="submit" name="action" value="bookList">알림</button>
+            	<button type="submit" name="action" value="bookList">예약/웨이팅</button>
             </form>
             <button onclick="location.reload()">알림</button>
             <form method="POST" action="MyPage">

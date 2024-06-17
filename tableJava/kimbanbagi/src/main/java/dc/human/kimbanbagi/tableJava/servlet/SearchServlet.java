@@ -27,8 +27,10 @@ public class SearchServlet extends HttpServlet {
 		List<RestaurantDTO> dtoList = dao.searchRestaurant(keywords);
 		
 		if(dtoList.isEmpty()) {
-			//결과 찾지 못 했을 시 alert 처리
-			System.out.println("검색 결과를 찾지 못 했습니다.");
+			String msg = "검색 결과를 찾지 못 했습니다.";
+			request.setAttribute("msg", msg);
+			request.setAttribute("userId", userId);
+			request.getRequestDispatcher("search.jsp").forward(request, response);
 		}else {
 			request.setAttribute("searchResult", dtoList);
 			request.setAttribute("keywords", keywords);

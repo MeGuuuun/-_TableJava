@@ -39,7 +39,7 @@ public class RestaurantDAO {
 		        try {
 		        	conn = DBConnectionManager.getConnection();
 		        	
-		        	String sql = "INSERT into restaurants "
+		        	String sql = "INSERT into restaurants ("
 		        			+ "restaurant_id,"
 		        			+ "restaurant_name,"
 		        			+ "restaurant_head,"
@@ -51,7 +51,7 @@ public class RestaurantDAO {
 		        			+ "reservation_available,"
 		        			+ "waiting_available,"
 		        			+ "created_date,"
-		        			+ "created_id"
+		        			+ "created_id) "
 		        			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 		        		
 		        	PreparedStatement pstmt = conn.prepareStatement(sql);

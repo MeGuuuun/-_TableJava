@@ -34,6 +34,7 @@ public class LoginDAO {
 	
 	public String match(String uid, String pwd) {
 		String result = null;
+		int cnt=0;
 		
 		try {
 			conn = DBConnectionManager.getConnection();
@@ -41,28 +42,41 @@ public class LoginDAO {
 			// 임시 비밀번호 테이블까지 join하여 대조하는 query문
 			String sql = "SELECT "
 					+ "COUNT(*) AS cnt "
-					+ "FROM users u, temporary_password t "
-					+ "WHERE u.user_id=t.user_id "
-					+ "AND u.user_id=? "
-					+ "AND (u.user_pwd=? OR t.temporary_pwd=?)"; 
+					+ "FROM users "
+					+ "WHERE user_id=? "
+					+ "AND user_pwd=?"; 
 			
 			PreparedStatement pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
 			pstmt.setString(2, pwd);
-			pstmt.setString(3, pwd);
 			
 			ResultSet rs=pstmt.executeQuery();
 			
 			while(rs.next()) {
-				int cnt=rs.getInt("cnt");
+				cnt=rs.getInt("cnt");
+			}
+			
+			// 로그인 정보 대조 성공
+			if(cnt==1) {
+				result = getRole(uid); // 로그인한 사람이 사용자인지, 사장님인지 판별하는 메소드
 				
-				// 로그인 정보 대조 성공
-				if(cnt==1) {
-					result = getRole(uid); // 로그인한 사람이 사용자인지, 사장님인지 판별하는 메소드
+			// 로그인 정보 대조 실패
+			}else {
+				try {
+					sql = "SELECT "
+							+ "COUNT(*) AS cnt "
+							+ "FROM temporary_password "
+							+ "WHERE user_id=? "
+							+ "AND temporary_pwd=?";
 					
-				// 로그인 정보 대조 실패
-				}else {
-					System.out.println("정보를 찾지못했습니다.");
+					pstmt.setString(1, uid);
+					pstmt.setString(2, pwd);
+					
+					while(rs.next()) {
+						result = getRole(uid);
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
 				}
 			}
 			

@@ -2,8 +2,8 @@ package dc.human.kimbanbagi.tableJava.servlet;
 
 import java.io.IOException;
 
-import dc.human.kimbanbagi.tableJava.dao.WaitDAO;
-import dc.human.kimbanbagi.tableJava.dto.WaitDTO;
+import dc.human.kimbanbagi.tableJava.dao.*;
+import dc.human.kimbanbagi.tableJava.dto.*;
 
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -73,10 +73,21 @@ public class WaitServlet extends HttpServlet {
 	        
 	     // 웨이팅 신청 성공 시 성공 화면으로 이동
 	        if(dao.addWaiting(dto)!=0) {
-	        	request.setAttribute("userId", userId);
-	             request.getRequestDispatcher("/waitSuccess.jsp").forward(request, response);
+	        	NotificationDAO ndao = new NotificationDAO();
+	        	
+	        	if(ndao.addWaitNotification(dto)!=0) {
+	        		request.setAttribute("userId", userId);
+		            request.getRequestDispatcher("/waitSuccess.jsp").forward(request, response);
+	        	}else {
+	        		// notification 처리 오류
+	        	}
+	        	
 	        } else {
-	        	// sql문 오류 시 처리 코드 작성
+	        	String msg = "웨이팅 신청에 오류가 생겼습니다. 다시 시도해주세요.";
+	        	request.setAttribute("msg", msg);
+	        	request.setAttribute("userId", userId);
+	        	request.setAttribute("restaurantId", restaurantId);
+	        	request.getRequestDispatcher("restaurantDetail").forward(request, response);
 	        }
 		}
        

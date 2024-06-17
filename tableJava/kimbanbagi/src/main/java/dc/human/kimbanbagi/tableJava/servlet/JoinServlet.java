@@ -84,7 +84,9 @@ public class JoinServlet extends HttpServlet {
 			if(dao.join(dto) != 0) {
 				request.getRequestDispatcher("joinSuccess.jsp").forward(request, response);
 			}else {
-				// sql문 오류 시 처리 코드 작성
+				String msg = "오류가 생겼습니다. 회원 가입 조건을 다시 확인해주세요.";
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("join.jsp").forward(request, response);
 			}
         }
     }

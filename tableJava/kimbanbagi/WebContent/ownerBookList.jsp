@@ -10,11 +10,12 @@
 <script>
 
 // 예약 확정 처리 ajax
-function confirmStatus(rId, uId, rName) {
+function confirmStatus(rId, bId, rName, uId) {
 	var status = "1";
 	var restaurantId = rId;
-	var userId = uId;
+	var bookId = bId; //예약한 사용자의 ID
 	var restaurantName = rName;
+	var userId = uId; // 사장님의 ID
 	
 	var cbutton = document.getElementById("confirmBtn");
 	var ebutton = document.getElementById("endBtn");
@@ -22,12 +23,10 @@ function confirmStatus(rId, uId, rName) {
 	$.ajax({
         type: "POST",
         url: "OwnerBookList",
-        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
+        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName, bookId : bookId },
         success: function(response) {
             alert("예약 확정되었습니다.");
-            cbutton.style.display = "none";
-            ebutton.style.display = "block";
-           	window.location.reload();
+            window.location.reload();
         },
         error: function() {
             alert("예약 확정에 실패했습니다. 다시 시도해주세요.");
@@ -36,21 +35,22 @@ function confirmStatus(rId, uId, rName) {
 }
 
 // 예약 종료 처리 ajax
-function endStatus(rId, uId, rName){
+function endStatus(rId, bId, rName, uId){
 	var status = "4";
 	var restaurantId = rId;
-	var userId = uId;
+	var bookId = bId;
 	var restaurantName = rName;
+	var userId = uId;
 	
 	var button = document.getElementById("endBtn");
 	
 	$.ajax({
         type: "POST",
         url: "OwnerBookList",
-        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
+        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName, bookId : bookId },
         success: function(response) {
-            button.disabled = true;
-           	window.location.reload();
+        	alert("예약 종료되었습니다.");
+            window.location.reload();
         },
         error: function() {
             alert("예약 종료에 실패했습니다. 다시 시도해주세요.");
@@ -59,22 +59,21 @@ function endStatus(rId, uId, rName){
 }
 
 // 예약 취소 처리 ajax
-function cancelStatus(rId, uId, rName) {
+function cancelStatus(rId, bId, rName, uId) {
     var status = "3";
     var restaurantId = rId;
-    var userId = uId;
+   	var bookId = bId;
     var restaurantName = rName;
+    var userId = uId;
     
     var button = document.getElementById("cancelBtn");
    
     $.ajax({
         type: "POST",
         url: "OwnerBookList",
-        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName },
+        data: { action: "status", status: status, userId : userId, restaurantId : restaurantId, restaurantName : restaurantName, bookId : bookId },
         success: function(response) {
             alert("예약 취소되었습니다.");
-            button.value="취소 완료";
-            button.disabled=true;
             window.location.reload();
         },
         error: function() {
@@ -127,15 +126,24 @@ function cancelStatus(rId, uId, rName) {
 				<div>
 					예약 상태 : ${book.status }
 				</div>
-				<div>
-					<button type="button" onclick="confirmStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="confirmBtn" value="예약 확정"></button>
-				</div>
-				<div>
-					<button type="button" onclick="endStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName }')" id="endBtn" value="예약 종료" style="display:none;"></button>
-				</div>
-				<div>
-					<button type="button" onclick="cancelStatus('${book.restaurant_id}', '${book.user_id }', '${book.restaurantName}')" id="cancelBtn" value="예약 취소"></button>
-				</div>
+				<c:if test="${book.status ==  '예약 대기'}">
+					<div>
+						<button type="button" onclick="confirmStatus('${restaurantId}', '${book.user_id }', '${book.restaurant_name}', '${userId }')" id="confirmBtn">예약 확정</button>
+					</div>
+					<div>
+						<button type="button" onclick="cancelStatus('${restaurantId}', '${book.user_id }', '${book.restaurant_name}', '${userId }')" id="cancelBtn">예약 취소</button>
+					</div>
+				</c:if>
+				<c:if test="${book.status ==  '예약 확정'}">
+					<div>
+						<button type="button" onclick="endStatus('${restaurantId}', '${book.user_id }', '${book.restaurant_name }', '${userId }')" id="endBtn">예약 종료</button>
+					</div>
+					<div>
+						<button type="button" disabled>예약 취소</button>
+					</div>
+				</c:if>
+				<c:if test="${book.status ==  '예약 종료' || book.status == '예약 취소' || book.status == '예약 거절'}">
+				</c:if>
 			</div>
 		</c:forEach>
 	</ul>

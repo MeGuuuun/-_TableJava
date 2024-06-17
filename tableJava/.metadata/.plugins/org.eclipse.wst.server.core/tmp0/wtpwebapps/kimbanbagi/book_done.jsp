@@ -38,7 +38,7 @@
 	</form>
 	<!-- 확인 버튼 추가. 클릭 시 예약 내역 리스트 페이지로 이동 -->
 	<form method="post" action="UserBookList">
-		<input type="hidden" value="${userId }">
+		<input type="hidden" name="userId" value="${userId }">
 		<button type="submit" name="action" value="bookList">확인</button>
 	</form>
 </body>

@@ -6,7 +6,7 @@ public class WaitDTO {
 	private String restaurantId;
 	private String restaurantName;
 	private String headCount;
-	private String  waitingNumber;
+	private String waitingNumber;
 	private String waitingStatus;
 	
 	// Gettes and Setters

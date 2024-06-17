@@ -25,32 +25,24 @@ DATE     NAME           DESCRIPTION
 
 public class WaitDAO {
 	private Connection conn;
-	int row=0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
+	int row = 0; // insert 또는 update문이 잘 실행되었는지 확인할 때 쓰이는 변수
 
-	//update 또는 insert 시 updated_date / created_date 칼럼에 사용
+	// update 또는 insert 시 updated_date / created_date 칼럼에 사용
 	java.util.Date now = new java.util.Date();
-	Date sqlDate = new Date(now.getTime()); 
-	
+	Date sqlDate = new Date(now.getTime());
+
 	// 웨이팅 추가 메소드
 	public int addWaiting(WaitDTO wait) {
-		
+
 		try {
 			conn = DBConnectionManager.getConnection();
-			
-			String sql = "INSERT INTO waiting "
-					+ "user_id,"
-					+ "phone_number,"
-					+ "restaurant_id,"
-					+ "restaurant_name,"
-					+ "head_count,"
-					+ "waiting_number,"
-					+ "waiting_status,"
-					+ "created_date,"
-					+ "created_id "
+
+			String sql = "INSERT INTO waiting (" + "user_id," + "phone_number," + "restaurant_id," + "restaurant_name,"
+					+ "head_count," + "waiting_number," + "waiting_status," + "created_date," + "created_id) "
 					+ "VALUES(?,?,?,?,?,?,?,?,?)";
-			
+
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
+
 			pstmt.setString(1, wait.getUserId());
 			pstmt.setString(2, wait.getPhoneNumber());
 			pstmt.setString(3, wait.getRestaurantId());
@@ -60,111 +52,139 @@ public class WaitDAO {
 			pstmt.setString(7, wait.getWaitingStatus());
 			pstmt.setDate(8, sqlDate);
 			pstmt.setString(9, wait.getUserId());
-			
+
 			row = pstmt.executeUpdate();
-			
+
 			conn.close();
 			pstmt.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return row;
 	}
-	
+
+	// 몇 번째 대기 팀인지 알려주는 메소드
 	public String getNextWaitingNumber(String restaurantId) {
 		int nextNumber = 1;
-		
-        try {
-        	conn = DBConnectionManager.getConnection();
-        	
-            String sql = "SELECT COUNT(*) as cnt "
-            		+ "FROM waiting "
-            		+ "WHERE restaurant_id = ?";
-            
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, restaurantId);
-            ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                nextNumber = Integer.parseInt(rs.getString("cnt")) + 1;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Integer.toString(nextNumber);
-	 }
+		try {
+			conn = DBConnectionManager.getConnection();
+
+			String sql = "SELECT COUNT(*) as cnt " + "FROM waiting " + "WHERE restaurant_id = ?";
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, restaurantId);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				nextNumber = Integer.parseInt(rs.getString("cnt")) + 1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Integer.toString(nextNumber);
+	}
 
 	// 사용자의 웨이팅 내역 리스트를 보여주는 메소드
-	public List<WaitDTO> getWaitingList(String id) {
-        List<WaitDTO> waitingList = new ArrayList<>();
-        try {
-        	
-        	conn = DBConnectionManager.getConnection();
-        	
-            String sql = "SELECT "
-            		+ "restaurant_id,"
-            		+ "restaurant_name,"
-            		+ "head_count,"
-            		+ "waiting_number,"
-            		+ "DECODE(waiting_status, '0', '웨이팅 중', '1', '호출', '2', '(사용자) 취소', '3', '(사장님) 취소', '4', '착석 완료') status "
-            		+ "FROM waiting "
-            		+ "WHERE user_id = ?";
-            
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            ResultSet rs = pstmt.executeQuery();
+	public List<WaitDTO> getUserWaitingList(String id) {
+		List<WaitDTO> waitingList = new ArrayList<>();
+		try {
 
-            while (rs.next()) {
-                WaitDTO dto = new WaitDTO();
-               
-                dto.setRestaurantName(rs.getString("restaurant_name"));
-                dto.setHeadCount(rs.getString("head_count"));
-                dto.setWaitingNumber(rs.getString("waiting_number"));
-                dto.setWaitingStatus(rs.getString("status"));
+			conn = DBConnectionManager.getConnection();
 
-                waitingList.add(dto);
-            }
-            
-            conn.close();
-            pstmt.close();
-            rs.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return waitingList;
-    }
-	
-		// 웨이팅 상태를 변경하는 메소드
-		// 사용자 또는 사장님이 예약 내역에서 예약 확정/ 예약 취소 / 예약 거절 등의 버튼을 눌렀을 때 reservation_status가 변경되게 하는 메소드
-		public int changeStatus(String status, String u_id, String r_id ) {
-			try {
-				conn = DBConnectionManager.getConnection();
-				
-				String sql = "UPDATE waiting SET "
-						+ "waiting_status=?,"
-						+ "updated_date=?,"
-						+ "updated_id=? "
-						+ "WHERE user_id=? "
-						+ "AND restaurant_id=?";
-				
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				
-				pstmt.setString(1, status);
-				pstmt.setDate(2, sqlDate);
-				pstmt.setString(3, u_id);
-				pstmt.setString(4, u_id);
-				pstmt.setString(5, r_id);
-				
-				row = pstmt.executeUpdate();
-				
-			} catch(Exception e) {
-				e.printStackTrace();
+			String sql = "SELECT " + "restaurant_name," + "head_count," + "waiting_number,"
+					+ "DECODE(waiting_status, '0', '웨이팅 중', '1', '호출', '2', '웨이팅 취소', '3', '웨이팅 거절', '4', '착석 완료') status "
+					+ "FROM waiting " + "WHERE user_id = ?";
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				WaitDTO dto = new WaitDTO();
+
+				dto.setRestaurantName(rs.getString("restaurant_name"));
+				dto.setHeadCount(rs.getString("head_count"));
+				dto.setWaitingNumber(rs.getString("waiting_number"));
+				dto.setWaitingStatus(rs.getString("status"));
+
+				waitingList.add(dto);
 			}
-			
-			return row;
+
+			conn.close();
+			pstmt.close();
+			rs.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	
+		return waitingList;
+	}
+
+	// 사장님의 웨이팅 내역 리스트를 보여주는 메소드
+	public List<WaitDTO> getOwnerWaitingList(String id) {
+		List<WaitDTO> waitingList = new ArrayList<>();
+		try {
+
+			conn = DBConnectionManager.getConnection();
+
+			String sql = "SELECT " + "restaurant_name" + "user_id," + "head_count," + "waiting_number,"
+					+ "DECODE(waiting_status, '0', '웨이팅 중', '1', '호출', '2', '웨이팅 취소', '3', '웨이팅 거절', '4', '착석 완료') status "
+					+ "FROM waiting " + "WHERE restaurant_id = ?";
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				WaitDTO dto = new WaitDTO();
+
+				dto.setRestaurantName(rs.getString("restaurant_name"));
+				dto.setUserId(rs.getString("user_id"));
+				dto.setHeadCount(rs.getString("head_count"));
+				dto.setWaitingNumber(rs.getString("waiting_number"));
+				dto.setWaitingStatus(rs.getString("status"));
+
+				waitingList.add(dto);
+			}
+
+			conn.close();
+			pstmt.close();
+			rs.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return waitingList;
+	}
+
+	// 웨이팅 상태를 변경하는 메소드
+	// 사용자 또는 사장님이 예약 내역에서 예약 확정/ 예약 취소 / 예약 거절 등의 버튼을 눌렀을 때 reservation_status가
+	// 변경되게 하는 메소드
+	public int changeStatus(String status, String u_id, String r_id) {
+		try {
+			conn = DBConnectionManager.getConnection();
+
+			String sql = "UPDATE waiting SET " + "waiting_status=?," + "updated_date=?," + "updated_id=? "
+					+ "WHERE user_id=? " + "AND restaurant_id=?";
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, status);
+			pstmt.setDate(2, sqlDate);
+			pstmt.setString(3, u_id);
+			pstmt.setString(4, u_id);
+			pstmt.setString(5, r_id);
+
+			row = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return row;
+	}
+
 }
