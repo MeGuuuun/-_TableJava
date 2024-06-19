@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>userWaitList</title>
+<link rel="stylesheet" href="css/userWaitList.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	var msg = "${msg}";
@@ -44,48 +45,65 @@
 </head>
 <body>
 	<div class="nav">
-		<form method="POST" action="userMain">
-			<input type="hidden" name="userId" value="${userId }">
-			<button type="submit">메인 화면</button>
-		</form>
-		<button onclick="location.reload()">예약/웨이팅</button>
-		<form method="post" action="Notification">
-			<input type="hidden" name="userId" value="${userId }">
-			<button type="submit" name="action" value="userNotification">알림</button>
-		</form>
-		<form method="POST" action="MyPage">
-			<input type="hidden" name="userId" value="${userId }">
-			<button type="submit" name="action" value="getUserInfo">마이
-				페이지</button>
-		</form>
+		<img src="image/logo1.png" alt="로고 이미지">
+		<div class="buttons-container">
+			<form method="POST" action="userMain">
+				<input type="hidden" name="userId" value="${userId }">
+				<button type="submit">메인 화면</button>
+			</form>
+			<button onclick="location.reload()">예약/웨이팅</button>
+			<form method="post" action="Notification">
+				<input type="hidden" name="userId" value="${userId }">
+				<button type="submit" name="action" value="userNotification">알림</button>
+			</form>
+			<form method="POST" action="MyPage">
+				<input type="hidden" name="userId" value="${userId }">
+				<button type="submit" name="action" value="getUserInfo">마이
+					페이지</button>
+			</form>
+		</div>
 	</div>
-	<form method="post" action="UserBookList">
-		<input type="hidden" name="userId" value="${userId }">
-		<button type="submit" name="action" value="bookList">예약 내역</button>
-	</form>
-	<button onclick="location.reload()">웨이팅 내역</button>
-	<h1>웨이팅 내역</h1>
-	<ul>
-		<c:forEach items="${waitList}" var="wait">
-			<div>
-				<li>웨이팅한 식당 : ${wait.restaurantName} <br> 인원수 :
-					${wait.headCount } <br> 웨이팅 상태 : ${wait.waitingStatus } <br>
-					웨이팅숫자 : ${wait.waitingNumber} <br>
-				</li>
+
+	<div class="container">
+		<div class="optionDiv">
+			<div class="btnDiv">
+				<form method="post" action="UserBookList">
+					<input type="hidden" name="userId" value="${userId }">
+					<button type="submit" name="action" value="bookList" id="btn">예약
+						내역</button>
+				</form>
 			</div>
-			<div>
-				<c:if test="${wait.waitingStatus == '웨이팅 중' }">
-					<div>
-						<button type="button"
-							onclick="cancelStatus('${wait.restaurantId}', '${userId }', '${wait.restaurantName })"
-							id="statusBtn">웨이팅 취소</button>
+			<div class="btnDiv">
+				<button onclick="location.reload()" id="btn">웨이팅 내역</button>
+			</div>
+		</div>
+		<div class="contentDiv">
+			<div class="labelDiv">
+				<h1>웨이팅 내역</h1>
+			</div>
+			<c:forEach items="${waitList}" var="wait">
+				<div class="waitDiv">
+					<div class="waitContent">
+						<div class="status">
+							<h3>웨이팅 상태 : ${wait.waitingStatus }</h3>
+						</div>
+						웨이팅한 식당 : ${wait.restaurantName} <br> 인원수 : ${wait.headCount }
+						<br> <br> <br><br>웨이팅숫자 : ${wait.waitingNumber} <br>
 					</div>
-				</c:if>
-				<c:if test="${wait.waitingStatus == '웨이팅 취소' || wait.waitingStatus == '웨이팅 거절' || wait.waitingStatus == '착석 완료' }">
-					<button type="button" disabled>웨이팅 취소</button>
-				</c:if>
-			</div>
-		</c:forEach>
-	</ul>
+					<div class="waitBtnDiv">
+						<c:if test="${wait.waitingStatus == '웨이팅 중' }">
+								<button type="button"
+									onclick="cancelStatus('${wait.restaurantId}', '${userId }', '${wait.restaurantName })"
+									id="statusBtn">웨이팅 취소</button>
+						</c:if>
+						<c:if
+							test="${wait.waitingStatus == '웨이팅 취소' || wait.waitingStatus == '웨이팅 거절' || wait.waitingStatus == '착석 완료' }">
+							<button type="button" disabled>웨이팅 취소</button>
+						</c:if>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</div>
 </body>
 </html>

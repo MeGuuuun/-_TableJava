@@ -130,7 +130,7 @@ public class WaitDAO {
 
 			conn = DBConnectionManager.getConnection();
 
-			String sql = "SELECT " + "restaurant_name" + "user_id," + "head_count," + "waiting_number,"
+			String sql = "SELECT " + "restaurant_name, " + "user_id," + "head_count," + "waiting_number,"
 					+ "DECODE(waiting_status, '0', '웨이팅 중', '1', '호출', '2', '웨이팅 취소', '3', '웨이팅 거절', '4', '착석 완료') status "
 					+ "FROM waiting " + "WHERE restaurant_id = ?";
 
